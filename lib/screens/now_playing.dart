@@ -7,6 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/songController.dart';
+import 'package:ramp/custom.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 // import 'package:rxdart/rxdart.dart';
@@ -132,6 +133,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         final buffered =
                             durationState?.buffered ?? Duration.zero;
                         final total = durationState?.total ?? Duration.zero;
+
+                        final processingState = songPlayer.processingState;
+                        final playing = songPlayer.playing;
+
+                        if (processingState == ProcessingState.completed) {
+                          animator.stop();
+                        }
                         return ProgressBar(
                           progress: progress,
                           buffered: buffered,
@@ -153,41 +161,71 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MediaControl(mIcon: Icons.skip_previous, Tap: () {}),
+                      // oldPlay(),
                       Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: IconButton(
-                          onPressed: () {
-                            if (songPlayer.playing == true) {
-                              songPlayer.pause();
-                              setState(() {
-                                isPlaying = false;
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: StreamBuilder<PlayerState>(
+                            stream: songPlayer.playerStateStream,
+                            builder: (context, snapshot) {
+                              final playerState = snapshot.data;
+                              final processingState =
+                                  playerState?.processingState;
+                              final playing = playerState?.playing;
+                              if (processingState == ProcessingState.loading ||
+                                  processingState ==
+                                      ProcessingState.buffering) {
+                                return Container(
+                                  margin: const EdgeInsets.all(8.0),
+                                  width: 32.0,
+                                  height: 32.0,
+                                  child: const CircularProgressIndicator(),
+                                );
+                              } else if (playing != true) {
+                                return IconButton(
+                                    icon: const Icon(
+                                      Icons.play_arrow,
+                                      color: Colors.black,
+                                      size: 50,
+                                    ),
+                                    onPressed: () {
+                                      songPlayer.play();
+                                      setState(() {
+                                        isPlaying = true;
+                                        animator.repeat();
+                                      });
+                                    });
+                              } else if (processingState !=
+                                  ProcessingState.completed) {
+                                return IconButton(
+                                    icon: const Icon(
+                                      Icons.pause,
+                                      color: Colors.black,
+                                      size: 50,
+                                    ),
+                                    onPressed: () {
+                                      songPlayer.pause();
+                                      setState(() {
+                                        isPlaying = false;
+                                        animator.stop();
+                                      });
+                                    });
+                              } else {
                                 animator.stop();
-                              });
-                            } else {
-                              songPlayer.play();
-                              animator.repeat();
-                              setState(() {
-                                isPlaying = true;
-                              });
-                            }
-                          },
-                          icon: isPlaying == true
-                              ? const Icon(
-                                  Icons.pause,
-                                  color: Colors.black,
-                                  size: 30,
-                                )
-                              : const Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.black,
-                                  size: 30,
-                                ),
-                        ),
-                      ),
+                                return IconButton(
+                                  icon: const Icon(Icons.play_arrow,
+                                      color: Colors.black),
+                                  iconSize: 50.0,
+                                  onPressed: () =>
+                                      songPlayer.seek(Duration.zero),
+                                );
+                              }
+                            },
+                          )),
+
                       MediaControl(
                           mIcon: Icons.skip_next,
                           Tap: () {
@@ -197,11 +235,117 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     ],
                   ),
                 ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.loop,
+                            color: Colors.grey,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.shuffle,
+                            color: Colors.grey,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            Get.to(() => QueueScreen());
+                          },
+                          icon: Icon(
+                            Icons.playlist_play,
+                            color: Colors.white,
+                          )),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
         )
       ]),
+    );
+  }
+
+//old play buttno
+  Container oldPlay() {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(50)),
+      child: IconButton(
+        onPressed: () {
+          if (songPlayer.playing == true) {
+            songPlayer.pause();
+            setState(() {
+              isPlaying = false;
+              animator.stop();
+            });
+          } else {
+            songPlayer.play();
+            animator.repeat();
+            setState(() {
+              isPlaying = true;
+            });
+          }
+        },
+        icon: isPlaying == true
+            ? const Icon(
+                Icons.pause,
+                color: Colors.black,
+                size: 30,
+              )
+            : const Icon(
+                Icons.play_arrow,
+                color: Colors.black,
+                size: 30,
+              ),
+      ),
+    );
+  }
+}
+
+class QueueScreen extends StatefulWidget {
+  const QueueScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QueueScreen> createState() => QueueScreenState();
+}
+
+class QueueScreenState extends State<QueueScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [const Text("Queue"), Text("24")],
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.amber,
+                child: DraggableScrollableSheet(
+                    expand: true,
+                    maxChildSize: 0.9,
+                    minChildSize: 0.4,
+                    initialChildSize: 0.9,
+                    builder: (context, snapshot) {
+                      return ListView.builder(itemBuilder: ((context, index) {
+                        return ListTile();
+                      }));
+                    }),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
