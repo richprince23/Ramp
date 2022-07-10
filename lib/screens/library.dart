@@ -17,7 +17,7 @@ class Library extends StatefulWidget {
 }
 
 class _LibraryState extends State<Library> with TickerProviderStateMixin {
-  final TextEditingController _search = TextEditingController();
+  // final TextEditingController _search = TextEditingController();
 
   late final TabController _tabController =
       TabController(vsync: this, length: myTabs.length);
@@ -53,9 +53,35 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
           ],
         ),
       ),
-      body: TabBarView(controller: _tabController, children: const [
-        Center(
-          child: Text("No Playlists added"),
+      body: TabBarView(controller: _tabController, children: [
+        Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              height: MediaQuery.of(context).size.height * 0.1,
+              color: darkTheme.colorScheme.surface,
+              child: TextButton(
+                onPressed: () {},
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.playlist_add,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        "New Playlist",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ]),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: Text("No Playlists added"),
+              ),
+            ),
+          ],
         ),
         AllSongsScreen(),
         AllArtistes(),

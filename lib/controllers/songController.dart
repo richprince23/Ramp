@@ -6,20 +6,26 @@ import '../models/track.dart';
 
 // class songController extends GetxController {
 bool isPlaying = false;
-String song = "".obs as String;
+
 SongModel? track;
+
 String artist = "";
 
 // SongModel? trackModel;
 
 // }
 class songController extends GetxController {
-  final track = Track().obs;
+  // final track = Track().obs;
+  String song = "";
+  SongModel? curTrack;
+  bool isPlaying = false;
+  int does = 0;
 
-  updateInfo(SongModel curSong) {
-    // song = trackModel!.displayNameWOExt;
-    track.update((value) {
-      value!.trackModel = curSong;
-    });
+  setSong(SongModel this_song) {
+    song = this_song.title;
+    curTrack = this_song;
+    does++;
+    bool isPlaying = true;
+    update();
   }
 }

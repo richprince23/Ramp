@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ramp/models/track.dart';
 import '../controllers/songController.dart';
 import '../styles/style.dart';
 import 'package:ramp/custom.dart';
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 int curPage = 0;
 
 class _MainScreenState extends State<MainScreen> {
-  // songController trackController = Get.put<songController>(songController());
+  songController trackController = Get.put<songController>(songController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +84,10 @@ class _MainScreenState extends State<MainScreen> {
                   : const Icon(Icons.person_outlined),
             ),
           ]),
-      bottomSheet: isPlaying == true
-          ? NowPlayingPanel(
-              file: song,
-            )
-          : null,
+      // bottomSheet: NowPlayingPanel(
+      //     // track: curTrack,
+      //     ),
+      persistentFooterButtons: [NowPlayingPanel()],
     );
   }
 }

@@ -129,10 +129,10 @@ class _ArtistScreenState extends State<ArtistScreen> {
                                 // while (songPlayer.playing == true) {
                                 isPlaying = songPlayer.playing;
                                 // }
-                                song = snapshot.data![index].title;
+                                // song = snapshot.data![index].title;
                               });
                               Get.find<songController>()
-                                  .updateInfo(snapshot.data![index]);
+                                  .setSong(snapshot.data![index]);
                             },
                             title: Text(snapshot.data![index].title),
                           );

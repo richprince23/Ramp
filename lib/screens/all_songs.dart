@@ -56,24 +56,30 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                   onTap: () async {
                     String? uri = snapshot.data![index].uri;
                     loadPlay(snapshot.data![index]);
-                    // Get.to(
-                    //     () => NowPlayingScreen(track: snapshot.data![index]));
+
                     setState(() {
-                      // while (songPlayer.playing == true) {
                       isPlaying = songPlayer.playing;
-                      // }
-                      song = snapshot.data![index].title;
+                      // song = snapshot.data![index].title;
                     });
-                    Get.find<songController>()
-                        .updateInfo(snapshot.data![index]);
+                    Get.find<songController>().setSong(snapshot.data![index]);
+
+                    print(trackController.does);
                   },
                   trailing: IconButton(
                       icon: Icon(Icons.more_horiz_outlined),
                       onPressed: () {
                         // add to favorites
                       }),
-                  title: Text(snapshot.data![index].title,
-                      style: TextStyle(color: Colors.white)),
+                  title: Row(
+                    children: [
+                      Flexible(
+                        child: Text(snapshot.data![index].title,
+                            style: TextStyle(
+                                color: Colors.white,
+                                overflow: TextOverflow.ellipsis)),
+                      ),
+                    ],
+                  ),
                   subtitle:
                       Text(snapshot.data![index].artist ?? "Unknown Artiste"),
                   leading: QueryArtworkWidget(

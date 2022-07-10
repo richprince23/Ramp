@@ -10,7 +10,8 @@ final AudioPlayer songPlayer = AudioPlayer();
 loadPlay(SongModel file) {
   songPlayer.setAudioSource(AudioSource.uri(Uri.parse(file.uri!)));
   Track(trackModel: file);
+  
   track = file;
   songPlayer.play();
-  Get.to(() => NowPlayingScreen(track: file));
+  // Get.to(() => NowPlayingScreen(track: file));
 }
