@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ramp/api/audio_query.dart';
 import '../controllers/songController.dart';
 import '../styles/style.dart';
 import 'package:ramp/custom.dart';
@@ -16,6 +18,22 @@ int curPage = 0;
 
 class _MainScreenState extends State<MainScreen> {
   songController trackController = Get.put<songController>(songController());
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+  }
+
+  requestPermission() async {
+    // Web platform don't support permissions methods.
+    if (!kIsWeb) {
+      bool permissionStatus = await onAudioQuery.permissionsStatus();
+      if (!permissionStatus) {
+        await onAudioQuery.permissionsRequest();
+      }
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
