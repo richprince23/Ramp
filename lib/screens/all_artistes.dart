@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/custom.dart';
 import 'package:ramp/screens/artist_screen.dart';
 
 import '../api/audio_query.dart';
@@ -14,13 +17,20 @@ class AllArtistes extends StatefulWidget {
 
 class _AllArtistesState extends State<AllArtistes> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAcess();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ArtistModel>>(
       future: onAudioQuery.queryArtists(
           ignoreCase: true,
           orderType: OrderType.DESC_OR_GREATER,
           sortType: null,
-          uriType: UriType.EXTERNAL),
+          uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());

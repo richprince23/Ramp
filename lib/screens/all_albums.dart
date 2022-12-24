@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -18,10 +20,11 @@ class _AllAlbumsState extends State<AllAlbums> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<AlbumModel>>(
       future: onAudioQuery.queryAlbums(
-          ignoreCase: true,
-          orderType: OrderType.DESC_OR_GREATER,
-          sortType: null,
-          uriType: UriType.EXTERNAL),
+        ignoreCase: true,
+        orderType: OrderType.DESC_OR_GREATER,
+        sortType: null,
+        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
+      ),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());

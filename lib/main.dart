@@ -7,8 +7,8 @@ import 'package:ramp/screens/main_screen.dart';
 // import 'get/get.dart';
 
 void main() async {
-  await OnAudioQuery();
-  await OnAudioRoom().initRoom();
+  // OnAudioQuery();
+  // await OnAudioRoom().initRoom();
   runApp(const MyApp());
 }
 

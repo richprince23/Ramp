@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -40,10 +42,11 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<SongModel>>(
       future: onAudioQuery.querySongs(
-          ignoreCase: true,
-          orderType: OrderType.DESC_OR_GREATER,
-          sortType: null,
-          uriType: UriType.EXTERNAL),
+        ignoreCase: true,
+        orderType: OrderType.DESC_OR_GREATER,
+        sortType: null,
+        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
+      ),
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());

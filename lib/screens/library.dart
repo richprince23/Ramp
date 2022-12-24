@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ramp/api/audio_query.dart';
+import 'package:ramp/custom.dart';
 import 'package:ramp/screens/all_albums.dart';
 import 'package:ramp/screens/all_songs.dart';
 import 'package:ramp/styles/style.dart';
@@ -21,6 +23,12 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
   late final TabController _tabController =
       TabController(vsync: this, length: myTabs.length);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAcess();
+  }
 
   @override
   Widget build(BuildContext context) {
