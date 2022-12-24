@@ -29,8 +29,6 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
-    <key>NSAppleMusicUsageDescription</key>
-    <string>This app requires access to play music</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -47,5 +45,7 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>This app requires access to play music</string>
 </dict>
 </plist>
