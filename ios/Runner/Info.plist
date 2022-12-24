@@ -30,7 +30,7 @@
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Access Music Files</string>
+	<string>AccessMusicFiles</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
