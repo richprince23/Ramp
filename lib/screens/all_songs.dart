@@ -1,14 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/songController.dart';
-import 'package:ramp/models/track.dart';
 import '../api/audio_query.dart';
 import '../custom.dart';
-import 'now_playing.dart';
 
 class AllSongsScreen extends StatefulWidget {
   const AllSongsScreen({Key? key}) : super(key: key);
@@ -20,11 +17,16 @@ class AllSongsScreen extends StatefulWidget {
 class _AllSongsScreenState extends State<AllSongsScreen> {
   songController trackController = Get.put<songController>(songController());
   final AudioPlayer player = AudioPlayer();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getAcess();
+    songPlayer.currentIndexStream.listen((index) {
+      if (index != null) {
+        updateIndex(index);
+      }
+    });
   }
 
   @override
@@ -48,25 +50,26 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
         }
 
         if (snapshot.hasData) {
+          // setState(() {
+          queue.clear();
+          queue = snapshot.data!;
+          // });
           return ListView.builder(
               padding: const EdgeInsets.only(bottom: 40),
               itemCount: snapshot.data!.length,
               itemBuilder: ((context, index) {
                 return ListTile(
                   onTap: () async {
-                    String? uri = snapshot.data![index].uri;
-                    loadPlay(snapshot.data![index]);
-
+                    // String? uri = snapshot.data![index].uri;
                     setState(() {
                       isPlaying = songPlayer.playing;
-                      // song = snapshot.data![index].title;
+                      // curIndex = index;
                     });
                     Get.find<songController>().setSong(snapshot.data![index]);
-
-                    print(trackController.does);
+                    loadPlay(index);
                   },
                   trailing: IconButton(
-                      icon: Icon(Icons.more_horiz_outlined),
+                      icon: const Icon(Icons.more_horiz_outlined),
                       onPressed: () {
                         // add to favorites
                       }),
@@ -74,7 +77,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                     children: [
                       Flexible(
                         child: Text(snapshot.data![index].title,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 overflow: TextOverflow.ellipsis)),
                       ),
@@ -93,5 +96,14 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
         }
       },
     );
+  }
+
+  void updateIndex(int index) {
+    setState(() {
+      if (queue.isNotEmpty) {
+        trackController.setSong(queue[index]);
+        // curIndex = index;
+      }
+    });
   }
 }

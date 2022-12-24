@@ -7,18 +7,15 @@ import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
-import 'package:ramp/models/track.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:rxdart/rxdart.dart' as Rxx;
-import 'package:get/get.dart';
 import '../controllers/songController.dart';
-import '../screens/now_playing.dart';
 import '../screens/queue_screen.dart';
 
 class NowPlayingPanel extends StatefulWidget {
   // SongModel? track;
 
-  NowPlayingPanel({
+  const NowPlayingPanel({
     Key? key,
   }) : super(key: key);
 
@@ -31,7 +28,8 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
   songController trackController = Get.put<songController>(songController());
   double? value = 0.0;
   late AnimationController animator;
-  late Stream<DurationState> _durationState;
+  // late Stream<DurationState> _durationState;
+  Icon loopIcon = Icon(Icons.loop);
 
   Stream<DurationState> get durationStateStream =>
       Rxx.CombineLatestStream.combine2<Duration, Duration?, DurationState>(
@@ -45,7 +43,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
     // TODO: implement initState
     animator =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    // isPlaying == true ? animator.repeat() : animator.stop();
+    isPlaying == true ? animator.repeat() : animator.stop();
 
     super.initState();
   }
@@ -60,7 +58,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
   @override
   Widget build(BuildContext context) {
     return OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
+        transitionType: ContainerTransitionType.fade,
         closedBuilder: (context, data) {
           return Container(
             height: MediaQuery.of(context).size.height / 12,
@@ -68,7 +66,6 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
             decoration: BoxDecoration(
               // borderRadius: BorderRadius.circular(20),
               color: darkTheme.colorScheme.onSecondary,
-              // color: Colors.transparent,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,13 +77,17 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                       const SizedBox(
                         width: 10,
                       ),
-                      isPlaying == true
-                          ? GetBuilder<songController>(builder: (imageData) {
-                              return QueryArtworkWidget(
-                                  id: imageData.curTrack!.id,
-                                  type: ArtworkType.AUDIO);
-                            })
-                          : CircleAvatar(),
+                      Container(
+                        height: 40,
+                        width: 40,
+                        child: isPlaying == true
+                            ? GetBuilder<songController>(builder: (imageData) {
+                                return QueryArtworkWidget(
+                                    id: imageData.curTrack!.id,
+                                    type: ArtworkType.AUDIO);
+                              })
+                            : CircleAvatar(),
+                      ),
                       SizedBox(
                         width: 20,
                       ),
@@ -109,12 +110,22 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                   children: [
                     IconButton(
                         onPressed: () {
-                          print("play");
+                          trackController.song != ""
+                              // ? loadPlay(trackController.curTrack!)
+                              ? loadPlay(trackController.curIndex)
+                              : () {};
                         },
-                        icon: Icon(Icons.play_arrow_rounded)),
+                        icon: isPlaying == true
+                            ? Icon(Icons.pause)
+                            : Icon(Icons.play_arrow)),
                     IconButton(
                         onPressed: () {
-                          print("next");
+                          if (songPlayer.hasNext) {
+                            trackController
+                                .setSong(queue[trackController.curIndex]);
+                            loadPlay(trackController.curIndex);
+                            songPlayer.seekToNext();
+                          }
                         },
                         icon: Icon(Icons.skip_next_rounded)),
                   ],
@@ -154,17 +165,21 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                             child: child,
                           );
                         }),
-                        child: QueryArtworkWidget(
-                            artworkWidth:
-                                MediaQuery.of(context).size.width * 0.4,
-                            artworkHeight:
-                                MediaQuery.of(context).size.width * 0.4,
-                            id: isPlaying == true
-                                ? trackController.curTrack!.id
-                                : 0,
-                            artworkBorder: BorderRadius.circular(100),
-                            type: ArtworkType.AUDIO),
-                      ),
+                        child: GetBuilder<songController>(
+                          builder: (controller) {
+                            return QueryArtworkWidget(
+                                artworkWidth:
+                                    MediaQuery.of(context).size.width * 0.4,
+                                artworkHeight:
+                                    MediaQuery.of(context).size.width * 0.4,
+                                id: isPlaying == true
+                                    ? controller.curTrack!.id
+                                    : 0,
+                                artworkBorder: BorderRadius.circular(100),
+                                type: ArtworkType.AUDIO);
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -179,27 +194,35 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        // widget.track!.title,
-                        isPlaying == true
-                            ? trackController.curTrack!.title
-                            : "Not Playing",
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
+                      GetBuilder<songController>(
+                        builder: (controller) {
+                          return Text(
+                            // widget.track!.title,
+                            isPlaying == true
+                                ? controller.curTrack!.title
+                                : "Not Playing",
+                            style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
                       ),
-                      Text(
-                        isPlaying == true
-                            ? trackController.curTrack!.artist!
-                            : ". . .",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
+                      GetBuilder<songController>(
+                        builder: ((controller) {
+                          return Text(
+                            isPlaying == true
+                                ? controller.curTrack!.artist!
+                                : ". . .",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          );
+                        }),
                       ),
                       Container(
                         padding: const EdgeInsets.all(8.0),
@@ -224,6 +247,11 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                                 animator.stop();
                               }
                               return ProgressBar(
+                                // style
+                                progressBarColor: Colors.purpleAccent,
+                                thumbColor: Colors.purpleAccent,
+                                baseBarColor: Colors.purple,
+                                barCapShape: BarCapShape.square,
                                 progress: progress,
                                 buffered: buffered,
                                 total: total,
@@ -245,7 +273,15 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             MediaControl(
-                                mIcon: Icons.skip_previous, Tap: () {}),
+                                mIcon: Icons.skip_previous,
+                                Tap: () {
+                                  if (songPlayer.hasPrevious) {
+                                    trackController.setSong(
+                                        queue[trackController.curIndex--]);
+                                    loadPlay(trackController.curIndex);
+                                    songPlayer.seekToPrevious();
+                                  }
+                                }),
                             // oldPlay(),
                             Container(
                                 width: 70,
@@ -324,8 +360,13 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                             MediaControl(
                                 mIcon: Icons.skip_next,
                                 Tap: () {
-                                  songPlayer.seekToNext();
-                                  songPlayer.play();
+                                  if (songPlayer.hasNext) {
+                                    trackController.setSong(
+                                        queue[trackController.curIndex]);
+                                    loadPlay(trackController.curIndex);
+                                    songPlayer.seekToNext();
+                                  }
+                                  // songPlayer.play();
                                 }),
                           ],
                         ),
@@ -336,11 +377,35 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.loop,
-                                  color: Colors.grey,
-                                )),
+                              onPressed: () {
+                                songPlayer.loopModeStream.listen((event) {
+                                  if (songPlayer.loopMode == LoopMode.off) {
+                                    songPlayer.setLoopMode(LoopMode.one);
+                                    setState(() {
+                                      loopIcon = Icon(Icons.repeat_one);
+                                    });
+                                  } else if (songPlayer.loopMode ==
+                                      LoopMode.one) {
+                                    songPlayer.setLoopMode(LoopMode.all);
+                                    setState(() {
+                                      loopIcon = Icon(Icons.repeat_on);
+                                    });
+                                  } else if (songPlayer.loopMode ==
+                                      LoopMode.all) {
+                                    songPlayer.setLoopMode(LoopMode.off);
+                                    setState(() {
+                                      loopIcon = Icon(Icons.loop);
+                                    });
+                                  }
+                                });
+                                setState(() {
+                                  loopIcon = Icon(Icons.repeat_one);
+                                });
+                                //
+                              },
+                              icon: loopIcon,
+                              color: Colors.grey,
+                            ),
                             IconButton(
                                 onPressed: () {},
                                 icon: Icon(

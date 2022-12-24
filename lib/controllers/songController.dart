@@ -1,31 +1,33 @@
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
-import '../models/track.dart';
 
 // class songController extends GetxController {
 bool isPlaying = false;
 
-SongModel? track;
+List<SongModel> queue = [];
+// int curIndex = 0;
 
-String artist = "";
+ConcatenatingAudioSource enqueue(List<SongModel>? data) {
+  List<AudioSource> sources = [];
 
-// SongModel? trackModel;
+  for (SongModel song in queue) {
+    sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+  }
+  return ConcatenatingAudioSource(children: sources);
+}
 
-// }
 class songController extends GetxController {
-  // final track = Track().obs;
   String song = "";
   SongModel? curTrack;
   bool isPlaying = false;
   int does = 0;
-
+  int curIndex = 0;
   setSong(SongModel this_song) {
     song = this_song.title;
     curTrack = this_song;
-    does++;
-    bool isPlaying = true;
+    curIndex = this_song.id;
+    isPlaying = true;
     update();
   }
 }

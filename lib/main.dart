@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramp/screens/library.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:on_audio_room/on_audio_room.dart';
+import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/screens/main_screen.dart';
 // import 'get/get.dart';
 
-void main() {
+void main() async {
+  await OnAudioQuery();
+  await OnAudioRoom().initRoom();
   runApp(const MyApp());
 }
 

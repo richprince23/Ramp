@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
-
-import 'now_playing.dart';
+import 'package:ramp/widgets/playing_panel.dart';
 
 class ArtistScreen extends StatefulWidget {
   final ArtistModel artistModel;
@@ -28,15 +26,11 @@ class _ArtistScreenState extends State<ArtistScreen> {
             IconButton(
                 onPressed: () {}, icon: const Icon(Icons.more_vert_outlined))
           ],
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back))),
+          leading: const BackButton()),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.30,
               // color: Colors.brown,
@@ -116,28 +110,35 @@ class _ArtistScreenState extends State<ArtistScreen> {
                         AudiosFromType.ARTIST_ID, widget.artistModel.id),
                     builder:
                         (context, AsyncSnapshot<List<SongModel>> snapshot) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () async {
-                              String? uri = snapshot.data![index].uri;
-                              loadPlay(snapshot.data![index]);
-                              // Get.to(() => NowPlayingScreen(
-                              //     track: snapshot.data![index]));
-                              setState(() {
-                                // while (songPlayer.playing == true) {
-                                isPlaying = songPlayer.playing;
-                                // }
-                                // song = snapshot.data![index].title;
-                              });
-                              Get.find<songController>()
-                                  .setSong(snapshot.data![index]);
-                            },
-                            title: Text(snapshot.data![index].title),
-                          );
-                        },
-                      );
+                      if (snapshot.data == null) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasData) {
+                        queue.clear();
+                        queue = snapshot.data!;
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () async {
+                                setState(() {
+                                  isPlaying = songPlayer.playing;
+                                  // curIndex = index;
+                                });
+                                Get.find<songController>()
+                                    .setSong(snapshot.data![index]);
+                                loadPlay(index);
+                              },
+                              title: Text(snapshot.data![index].title),
+                            );
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: Text("No songs found"),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -146,6 +147,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
           ],
         ),
       ),
+      persistentFooterButtons: const [NowPlayingPanel()],
     );
   }
 }

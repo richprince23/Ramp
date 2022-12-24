@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramp/models/track.dart';
 import '../controllers/songController.dart';
 import '../styles/style.dart';
 import 'package:ramp/custom.dart';
-
 import '../widgets/playing_panel.dart';
-// as MyConst;
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -36,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
           onDestinationSelected: (int id) {
             setState(() {
               curPage = id;
-              print(curPage);
             });
           },
           backgroundColor: darkTheme.colorScheme.surface,
@@ -45,7 +41,6 @@ class _MainScreenState extends State<MainScreen> {
               onPressed: () {
                 setState(() {
                   curPage = 0;
-                  print(curPage);
                 });
               },
               icon: curPage == 0
