@@ -6,6 +6,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/songController.dart';
+import 'package:ramp/controllers/song_provider.dart';
+import 'package:ramp/vars.dart';
 import '../api/audio_query.dart';
 import '../custom.dart';
 
@@ -40,73 +42,64 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<SongModel>>(
-      future: onAudioQuery.querySongs(
-        ignoreCase: true,
-        orderType: OrderType.DESC_OR_GREATER,
-        sortType: null,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return buildSongs(allSongs);
+  }
 
-        if (snapshot.hasData) {
-          // setState(() {
-          queue.clear();
-          queue = snapshot.data!;
-          // });
-          return ListView.builder(
-              padding: const EdgeInsets.only(bottom: 40),
-              itemCount: snapshot.data!.length,
-              itemBuilder: ((context, index) {
-                return ListTile(
-                  onTap: () async {
-                    // String? uri = snapshot.data![index].uri;
-                    setState(() {
-                      isPlaying = songPlayer.playing;
-                      // curIndex = index;
-                    });
-                    Get.find<songController>().setSong(snapshot.data![index]);
-                    loadPlay(index);
-                  },
-                  trailing: IconButton(
-                      icon: const Icon(Icons.more_horiz_outlined),
-                      onPressed: () {
-                        // add to favorites
-                      }),
-                  title: Row(
-                    children: [
-                      Flexible(
-                        child: Text(snapshot.data![index].title,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                overflow: TextOverflow.ellipsis)),
-                      ),
-                    ],
-                  ),
-                  subtitle:
-                      Text(snapshot.data![index].artist ?? "Unknown Artiste"),
-                  leading: QueryArtworkWidget(
-                      id: snapshot.data![index].id, type: ArtworkType.AUDIO),
-                );
-              }));
-        } else {
-          return const Center(
-            child: Text("No songs found"),
-          );
-        }
+  RefreshIndicator buildSongs(List<SongModel> snapshot) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        getSongs();
+        // setState(() {});
       },
+      child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: 40),
+          itemCount: snapshot.length,
+          cacheExtent: 20,
+          itemBuilder: ((context, index) {
+            return ListTile(
+              onTap: () async {
+                // String? uri = snapshot.data![index].uri;
+                print("curendsdgajshgdhasgdgasd \n\n \t $index");
+                
+                // Get.find<songController>().setSong(snapshot[index]);
+                // loadPlay(index);
+                songPlayer.setAudioSource(enqueue(allSongs));
+                songPlayer.setUrl(allSongs[index].uri!);
+                songPlayer.play();
+                setState(() {
+                  isPlaying = songPlayer.playing;
+                  // updateIndex(index);
+                });
+              },
+              trailing: IconButton(
+                  icon: const Icon(Icons.more_horiz_outlined),
+                  onPressed: () {
+                    // add to favorites
+                  }),
+              title: Row(
+                children: [
+                  Flexible(
+                    child: Text(snapshot[index].title,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis)),
+                  ),
+                ],
+              ),
+              subtitle: Text(snapshot[index].artist ?? "Unknown Artiste"),
+              leading: QueryArtworkWidget(
+                  id: snapshot[index].id, type: ArtworkType.AUDIO),
+            );
+          })),
     );
   }
 
   void updateIndex(int index) {
-    setState(() {
-      if (queue.isNotEmpty) {
-        trackController.setSong(queue[index]);
-        // curIndex = index;
-      }
-    });
+    // setState(() {
+    if (queue.isNotEmpty) {
+      trackController.setSong(queue[index]);
+      // curIndex = index;
+    }
+    // });
   }
 }

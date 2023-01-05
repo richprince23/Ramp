@@ -1,6 +1,6 @@
 import 'package:on_audio_query/on_audio_query.dart';
 
-List<SongModel> queue = [];
+List<SongModel> curQueue = [];
 List<SongModel> allSongs = [];
 List<ArtistModel> allArtistes = [];
 List<AlbumModel> allAlbums = [];

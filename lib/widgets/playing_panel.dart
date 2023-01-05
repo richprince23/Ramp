@@ -9,6 +9,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/styles/style.dart';
+import 'package:ramp/vars.dart';
 import 'package:rxdart/rxdart.dart' as Rxx;
 import '../controllers/songController.dart';
 import '../screens/queue_screen.dart';
@@ -148,7 +149,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
             ),
             body: Stack(alignment: AlignmentDirectional.topCenter, children: [
               Positioned(
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.5,
                 width: MediaQuery.of(context).size.width,
                 child: Container(
                   decoration: BoxDecoration(
@@ -158,29 +159,29 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AnimatedBuilder(
-                        animation: animator.view,
-                        builder: ((context, child) {
-                          return Transform.rotate(
-                            angle: animator.value * 2 * pi,
-                            child: child,
-                          );
-                        }),
-                        child: GetBuilder<songController>(
-                          builder: (controller) {
-                            return QueryArtworkWidget(
-                                artworkWidth:
-                                    MediaQuery.of(context).size.width * 0.4,
-                                artworkHeight:
-                                    MediaQuery.of(context).size.width * 0.4,
-                                id: isPlaying == true
-                                    ? controller.curTrack!.id
-                                    : 0,
-                                artworkBorder: BorderRadius.circular(100),
-                                type: ArtworkType.AUDIO);
-                          },
-                        ),
-                      )
+                      // AnimatedBuilder(
+                      //   animation: animator.view,
+                      //   builder: ((context, child) {
+                      //     return Transform.rotate(
+                      //       angle: animator.value * 2 * pi,
+                      //       child: child,
+                      //     );
+                      //   }),
+                      //   child: GetBuilder<songController>(
+                      //     builder: (controller) {
+                      //       return QueryArtworkWidget(
+                      //           artworkWidth:
+                      //               MediaQuery.of(context).size.width * 0.4,
+                      //           artworkHeight:
+                      //               MediaQuery.of(context).size.width * 0.4,
+                      //           id: isPlaying == true
+                      //               ? controller.curTrack!.id
+                      //               : 0,
+                      //           artworkBorder: BorderRadius.circular(100),
+                      //           type: ArtworkType.AUDIO);
+                      //     },
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -428,7 +429,7 @@ class _NowPlayingPanelState extends State<NowPlayingPanel>
                   ),
                 ),
               )
-            ]),
+            ],),
           );
         });
   }

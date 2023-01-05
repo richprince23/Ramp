@@ -4,6 +4,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
+import 'package:ramp/vars.dart';
 import 'package:ramp/widgets/playing_panel.dart';
 
 class ArtistScreen extends StatefulWidget {

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_query.dart';
+import 'package:ramp/vars.dart';
 import '../controllers/songController.dart';
 import '../styles/style.dart';
 import 'package:ramp/custom.dart';
@@ -22,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     requestPermission();
+    // getMedia();
   }
 
   requestPermission() async {
@@ -100,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
       // bottomSheet: NowPlayingPanel(
       //     // track: curTrack,
       //     ),
-      persistentFooterButtons: [NowPlayingPanel()],
+      // persistentFooterButtons: [NowPlayingPanel()],
     );
   }
 }

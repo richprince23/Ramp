@@ -11,6 +11,7 @@ import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/custom.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:ramp/vars.dart';
 // import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/rxdart.dart' as Rxx;
 

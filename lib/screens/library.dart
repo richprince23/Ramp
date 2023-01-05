@@ -31,38 +31,6 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     getAcess();
-    setState(() {
-      allSongs = onAudioQuery.querySongs(
-        ignoreCase: true,
-        orderType: OrderType.ASC_OR_SMALLER,
-        sortType: null,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ) as List<SongModel>;
-      allArtistes = onAudioQuery.queryArtists(
-        ignoreCase: true,
-        orderType: OrderType.ASC_OR_SMALLER,
-        sortType: ArtistSortType.ARTIST,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ) as List<ArtistModel>;
-      allAlbums = onAudioQuery.queryAlbums(
-        ignoreCase: true,
-        orderType: OrderType.ASC_OR_SMALLER,
-        sortType: null,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ) as List<AlbumModel>;
-      allGenres = onAudioQuery.queryGenres(
-        ignoreCase: true,
-        orderType: OrderType.ASC_OR_SMALLER,
-        sortType: GenreSortType.GENRE,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ) as List<GenreModel>;
-      allPlaylists = onAudioQuery.queryPlaylists(
-        ignoreCase: true,
-        orderType: OrderType.ASC_OR_SMALLER,
-        sortType: PlaylistSortType.DATE_ADDED,
-        uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
-      ) as List<PlaylistModel>;
-    });
   }
 
   @override
@@ -104,7 +72,11 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height * 0.1,
               color: darkTheme.colorScheme.surface,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  for (var song in allSongs) {
+                    print(song.title);
+                  }
+                },
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
