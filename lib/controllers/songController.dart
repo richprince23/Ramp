@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/vars.dart';
 
 // class songController extends GetxController {
 // bool isPlaying = false;
@@ -13,6 +14,7 @@ ConcatenatingAudioSource enqueue(List<SongModel>? data) {
 
   for (SongModel song in data!) {
     sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+    queue.add(song);
   }
   return ConcatenatingAudioSource(children: sources);
 }

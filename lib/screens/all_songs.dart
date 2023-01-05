@@ -48,7 +48,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
   RefreshIndicator buildSongs(List<SongModel> snapshot) {
     return RefreshIndicator(
       onRefresh: () async {
-        getSongs();
+        allSongs = await getSongs();
         // setState(() {});
       },
       child: ListView.builder(
@@ -59,14 +59,17 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
             return ListTile(
               onTap: () async {
                 // String? uri = snapshot.data![index].uri;
-                print("curendsdgajshgdhasgdgasd \n\n \t $index");
-                
-                // Get.find<songController>().setSong(snapshot[index]);
-                // loadPlay(index);
-                songPlayer.setAudioSource(enqueue(allSongs));
-                songPlayer.setUrl(allSongs[index].uri!);
+                print("curent song index \n\n \t $index");
+
+                // curQueue.clear();
+                curQueue = allSongs;
+
+                songPlayer.setAudioSource(enqueue(curQueue),
+                    preload: true, initialIndex: index);
+                // songPlayer.setUrl(allSongs[index].uri!);
                 songPlayer.play();
                 setState(() {
+                  curTrack = curQueue[index];
                   isPlaying = songPlayer.playing;
                   // updateIndex(index);
                 });

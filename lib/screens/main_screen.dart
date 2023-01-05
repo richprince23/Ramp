@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_query.dart';
+import 'package:ramp/screens/playing_bar.dart';
 import 'package:ramp/vars.dart';
 import '../controllers/songController.dart';
 import '../styles/style.dart';
@@ -106,6 +107,9 @@ class _MainScreenState extends State<MainScreen> {
       //     // track: curTrack,
       //     ),
       // persistentFooterButtons: [NowPlayingPanel()],
+      persistentFooterButtons: [
+        PlayingBar(),
+      ],
     );
   }
 }

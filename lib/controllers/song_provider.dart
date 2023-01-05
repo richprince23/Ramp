@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import "package:provider/provider.dart";
 import 'package:ramp/api/audio_query.dart';
@@ -38,7 +39,7 @@ getMedia() async {
   );
 }
 
-Future<List<SongModel>> getSongs() async {
+getSongs() async {
   allSongs = await onAudioQuery.querySongs(
     ignoreCase: true,
     orderType: OrderType.ASC_OR_SMALLER,
@@ -56,4 +57,13 @@ Future<List<ArtistModel>> getArtist() async {
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   return allArtistes;
+}
+
+class SongProvider extends ChangeNotifier {
+  set setSong(SongModel song) {
+    curTrack = song;
+    notifyListeners();
+  }
+
+  SongModel? getSong() => curTrack;
 }
