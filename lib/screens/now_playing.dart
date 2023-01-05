@@ -5,9 +5,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
+import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/custom.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
@@ -71,71 +73,75 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
       ),
       body: Column(mainAxisSize: MainAxisSize.max, children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.4,
-          width: MediaQuery.of(context).size.width,
-          child: Container(
-            decoration: BoxDecoration(
-              color: darkTheme.colorScheme.surface,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedBuilder(
-                  animation: animator.view,
-                  builder: ((context, child) {
-                    return Transform.rotate(
-                      angle: animator.value * 2 * pi,
-                      child: child,
-                    );
-                  }),
-                  child: curTrack != null
-                      ? QueryArtworkWidget(
-                          artworkWidth: MediaQuery.of(context).size.width * 0.3,
-                          artworkHeight:
-                              MediaQuery.of(context).size.width * 0.3,
-                          id: curTrack!.id,
-                          artworkBorder: BorderRadius.circular(100),
-                          type: ArtworkType.AUDIO)
-                      : const CircleAvatar(
-                          radius: 80,
+            height: MediaQuery.of(context).size.height * 0.4,
+            width: MediaQuery.of(context).size.width,
+            child: Consumer<SongProvider>(
+              builder: ((context, song, child) => Container(
+                    decoration: BoxDecoration(
+                      color: darkTheme.colorScheme.surface,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        AnimatedBuilder(
+                          animation: animator.view,
+                          builder: ((context, child) {
+                            return Transform.rotate(
+                              angle: animator.value * 2 * pi,
+                              child: child,
+                            );
+                          }),
+                          child: song.getSong() != null
+                              ? QueryArtworkWidget(
+                                  artworkWidth:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  artworkHeight:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  id: curTrack!.id,
+                                  artworkBorder: BorderRadius.circular(100),
+                                  type: ArtworkType.AUDIO)
+                              : const CircleAvatar(
+                                  radius: 80,
+                                ),
                         ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        curTrack != null ? curTrack!.title : "Track 1",
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        curTrack != null ? curTrack!.artist! : "Unknown Artist",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                curTrack != null ? curTrack!.title : "Track 1",
+                                // context.watch<SongProvider>().getSong()!.title,
+                                style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                curTrack != null
+                                    ? curTrack!.artist!
+                                    : "Unknown Artist",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            )),
         Expanded(
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.7,
             // bottom: 0,
-            color: Colors.green,
             child: Container(
               padding: const EdgeInsets.all(12.0),
               color: darkTheme.colorScheme.surface,
@@ -163,6 +169,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             animator.stop();
                           }
                           return ProgressBar(
+                            barHeight: 3,
+                            thumbRadius: 5,
                             progress: progress,
                             buffered: buffered,
                             total: total,
@@ -182,7 +190,20 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        MediaControl(mIcon: Icons.skip_previous, Tap: () {}),
+                        MediaControl(
+                            mIcon: Icons.skip_previous,
+                            Tap: () {
+                              if (songPlayer.hasPrevious) {
+                                songPlayer.seekToPrevious();
+                                songPlayer.play();
+                                Provider.of<SongProvider>(context,
+                                        listen: false)
+                                    .setIndex(songPlayer.previousIndex!);
+                                Provider.of<SongProvider>(context,
+                                        listen: false)
+                                    .setSong(curQueue[curIndex]);
+                              }
+                            }),
                         // oldPlay(),
                         Container(
                             width: 70,
@@ -252,8 +273,16 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         MediaControl(
                             mIcon: Icons.skip_next,
                             Tap: () {
-                              songPlayer.seekToNext();
-                              songPlayer.play();
+                              if (songPlayer.hasNext) {
+                                songPlayer.seekToNext();
+                                songPlayer.play();
+                                Provider.of<SongProvider>(context,
+                                        listen: false)
+                                    .setIndex(songPlayer.nextIndex!);
+                                Provider.of<SongProvider>(context,
+                                        listen: false)
+                                    .setSong(curQueue[curIndex]);
+                              }
                             }),
                       ],
                     ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/controllers/song_provider.dart';
@@ -29,6 +30,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
     songPlayer.currentIndexStream.listen((index) {
       if (index != null) {
         updateIndex(index);
+        // Provider.of<SongProvider>(context, listen: false).setIndex(index);
       }
     });
   }
@@ -57,22 +59,8 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
           cacheExtent: 20,
           itemBuilder: ((context, index) {
             return ListTile(
-              onTap: () async {
-                // String? uri = snapshot.data![index].uri;
-                print("curent song index \n\n \t $index");
-
-                // curQueue.clear();
-                curQueue = allSongs;
-
-                songPlayer.setAudioSource(enqueue(curQueue),
-                    preload: true, initialIndex: index);
-                // songPlayer.setUrl(allSongs[index].uri!);
-                songPlayer.play();
-                setState(() {
-                  curTrack = curQueue[index];
-                  isPlaying = songPlayer.playing;
-                  // updateIndex(index);
-                });
+              onTap: () {
+                playMedia(context, allSongs, index);
               },
               trailing: IconButton(
                   icon: const Icon(Icons.more_horiz_outlined),

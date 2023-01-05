@@ -131,11 +131,11 @@ class QueueScreenState extends State<QueueScreen> {
   }
 
   void updateIndex(int index) {
-    setState(() {
-      if (queue.isNotEmpty) {
-        trackController.setSong(queue[index]);
-        // curIndex = index;
-      }
-    });
+    // setState(() {
+    if (queue.isNotEmpty) {
+      trackController.setSong(queue[index]);
+      // curIndex = index;
+    }
+    // });
   }
 }

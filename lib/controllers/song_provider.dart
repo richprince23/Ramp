@@ -9,31 +9,31 @@ import 'package:ramp/vars.dart';
 getMedia() async {
   allSongs = await onAudioQuery.querySongs(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
-    sortType: null,
+    orderType: OrderType.DESC_OR_GREATER,
+    sortType: SongSortType.ARTIST,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   allArtistes = await onAudioQuery.queryArtists(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
+    orderType: OrderType.DESC_OR_GREATER,
     sortType: ArtistSortType.ARTIST,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   allAlbums = await onAudioQuery.queryAlbums(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
+    orderType: OrderType.DESC_OR_GREATER,
     sortType: null,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   allGenres = await onAudioQuery.queryGenres(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
+    orderType: OrderType.DESC_OR_GREATER,
     sortType: GenreSortType.GENRE,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   allPlaylists = await onAudioQuery.queryPlaylists(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
+    orderType: OrderType.DESC_OR_GREATER,
     sortType: PlaylistSortType.DATE_ADDED,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
@@ -42,8 +42,8 @@ getMedia() async {
 getSongs() async {
   allSongs = await onAudioQuery.querySongs(
     ignoreCase: true,
-    orderType: OrderType.ASC_OR_SMALLER,
-    sortType: null,
+    orderType: OrderType.DESC_OR_GREATER,
+    sortType: SongSortType.ARTIST,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
   return allSongs;
@@ -60,10 +60,22 @@ Future<List<ArtistModel>> getArtist() async {
 }
 
 class SongProvider extends ChangeNotifier {
-  set setSong(SongModel song) {
+  void setSong(SongModel song) {
     curTrack = song;
     notifyListeners();
   }
 
   SongModel? getSong() => curTrack;
+
+  void setIndex(int index) {
+    curIndex = index;
+    notifyListeners();
+  }
+
+  void setPlaying(bool state) {
+    isPlaying = state;
+    notifyListeners();
+  }
+
+  get playing => isPlaying;
 }
