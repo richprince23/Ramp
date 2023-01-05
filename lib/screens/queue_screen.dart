@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/widgets/playing_panel.dart';
 import '../api/audio_player.dart';

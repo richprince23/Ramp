@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/api/audio_player.dart';
+import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/custom.dart';
 import 'package:ramp/styles/style.dart';

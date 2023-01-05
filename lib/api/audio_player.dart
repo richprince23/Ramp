@@ -1,8 +1,9 @@
 import 'package:just_audio/just_audio.dart';
+import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
 
-final AudioPlayer songPlayer = AudioPlayer();
 
+//play song
 loadPlay(int index) {
   songPlayer.setAudioSource(initialIndex: index, enqueue(queue));
 
