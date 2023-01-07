@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/custom.dart';
 import 'package:ramp/screens/artist_screen.dart';
-
-import '../api/audio_query.dart';
+import 'package:ramp/vars.dart';
 
 class AllArtistes extends StatefulWidget {
   const AllArtistes({Key? key}) : super(key: key);
@@ -20,49 +18,44 @@ class _AllArtistesState extends State<AllArtistes> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAcess();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ArtistModel>>(
-      future: onAudioQuery.queryArtists(
-          ignoreCase: true,
-          orderType: OrderType.DESC_OR_GREATER,
-          sortType: null,
-          uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return getArtistes(allArtistes);
+  }
 
-        if (snapshot.hasData) {
-          return ListView.builder(
-              padding: const EdgeInsets.only(bottom: 40),
-              itemCount: snapshot.data!.length,
-              itemBuilder: ((context, index) {
-                return ListTile(
-                  onTap: () {
-                    Get.to(
-                        () => ArtistScreen(
-                              artistModel: snapshot.data![index],
-                            ),
-                        transition: Transition.leftToRight);
-                  },
-                  title: Text(snapshot.data![index].artist,
-                      style: const TextStyle(color: Colors.white)),
-                  subtitle:
-                      Text(snapshot.data![index].numberOfTracks.toString()),
-                  leading: QueryArtworkWidget(
-                      id: snapshot.data![index].id, type: ArtworkType.ARTIST),
-                );
-              }));
-        } else {
-          return const Center(
-            child: Text("No songs found"),
-          );
-        }
+  RefreshIndicator getArtistes(List<ArtistModel> snapshot) {
+    return RefreshIndicator(
+      onRefresh: () {
+        return getArtists();
       },
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 40),
+        itemCount: snapshot.length,
+        cacheExtent: 20,
+        itemBuilder: ((context, index) {
+          if (snapshot.isEmpty) {
+            return const Center(
+              child: Text("No Artistes found"),
+            );
+          }
+          return ListTile(
+            onTap: () {
+              Get.to(
+                  () => ArtistScreen(
+                        artistModel: snapshot[index],
+                      ),
+                  transition: Transition.leftToRight);
+            },
+            title: Text(snapshot[index].artist,
+                style: const TextStyle(color: Colors.white)),
+            subtitle: Text(snapshot[index].numberOfTracks.toString()),
+            leading: QueryArtworkWidget(
+                id: snapshot[index].id, type: ArtworkType.ARTIST),
+          );
+        }),
+      ),
     );
   }
 }
