@@ -75,16 +75,10 @@ Future<List<SongModel>> getArtistSongs(int id) async {
       sortType: SongSortType.ALBUM);
 }
 
-getArtisteModel(int id) async {
-  List<SongModel> songs = await onAudioQuery.queryAudiosFrom(
-      AudiosFromType.ARTIST_ID, id,
-      sortType: SongSortType.ARTIST);
-
-  List<SongModel> ss = songs.toSongModel();
-  // print(artiste);
-  // notifyListeners();
-  // return songs[0].artist! ?? "Unknown";
-  return ss[0].artist! ?? "Unknown";
+Future<List<SongModel>> getAlbumSongs(int id) async {
+  return allAlbumsSongs = await onAudioQuery.queryAudiosFrom(
+      AudiosFromType.ALBUM_ID, id,
+      sortType: SongSortType.ALBUM);
 }
 
 class SongProvider extends ChangeNotifier {

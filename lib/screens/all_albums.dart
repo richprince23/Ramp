@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/screens/album_screen.dart';
 import 'package:ramp/screens/main_screen.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
@@ -33,10 +34,13 @@ GridView buildAlbums(List<AlbumModel> snapshot) {
       return Card(
         color: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: InkWell(
           onTap: () {
-            // Get.to(() => MainScreen(),);
+            Get.to(() => AlbumScreen(
+                  albumId: snapshot[index].id,
+                  albumName: snapshot[index].album,
+                ));
           },
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -49,7 +53,7 @@ GridView buildAlbums(List<AlbumModel> snapshot) {
                   // width: 80,
                   child: QueryArtworkWidget(
                       artworkFit: BoxFit.fill,
-                      artworkBorder: BorderRadius.circular(0),
+                      artworkBorder: BorderRadius.circular(8),
                       id: snapshot[index].id,
                       type: ArtworkType.ALBUM),
                 ),

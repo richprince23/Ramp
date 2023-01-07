@@ -61,6 +61,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
               ),
             ),
             Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,7 +120,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 1, vertical: 10),
-                  height: MediaQuery.of(context).size.height * 0.70,
+                  height: MediaQuery.of(context).size.height * 0.60,
 
                   width: MediaQuery.of(context).size.width,
                   // color: Colors.amber,

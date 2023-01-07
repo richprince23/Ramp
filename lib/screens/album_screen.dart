@@ -10,10 +10,10 @@ import 'package:ramp/vars.dart';
 class AlbumScreen extends StatefulWidget {
   // final ArtistModel artistModel;
 
-  final int artisteId;
-  late String? artistName;
+  final int albumId;
+  late String? albumName;
   // AlbumScreen({Key? key, required this.artistModel, })
-  AlbumScreen({Key? key, required this.artisteId, this.artistName})
+  AlbumScreen({Key? key, required this.albumId, this.albumName})
       : super(key: key);
 
   @override
@@ -21,22 +21,19 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  String? artistName;
+  String? albumName;
   @override
   void initState() {
     // TODO: implement initState
-    setState(() {
-      // artistName = getArtisteModel(widget.artisteId);
-    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // artistName = getArtisteModel(widget.artisteId);
     return Scaffold(
       appBar: AppBar(
-          title: Text(widget.artistName ?? "Artist"),
+          title: Text(widget.albumName ?? "Untitled"),
           centerTitle: true,
           actions: [
             IconButton(
@@ -55,12 +52,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 child: QueryArtworkWidget(
                     artworkWidth: MediaQuery.of(context).size.width * 0.4,
                     artworkHeight: MediaQuery.of(context).size.width * 0.4,
-                    id: widget.artisteId,
-                    type: ArtworkType.ARTIST,
+                    id: widget.albumId,
+                    type: ArtworkType.ALBUM,
                     artworkBorder: BorderRadius.circular(10)),
               ),
             ),
             Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,7 +70,9 @@ class _AlbumScreenState extends State<AlbumScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8)),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print(allAlbumsSongs);
+                        },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -119,12 +119,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 1, vertical: 10),
-                  height: MediaQuery.of(context).size.height * 0.70,
+                  height: MediaQuery.of(context).size.height * 0.6,
 
                   width: MediaQuery.of(context).size.width,
                   // color: Colors.amber,
                   child: FutureBuilder<List<SongModel>>(
-                    future: getArtistSongs(widget.artisteId),
+                    future: getAlbumSongs(widget.albumId),
+                    initialData: allAlbumsSongs,
                     builder:
                         (context, AsyncSnapshot<List<SongModel>> snapshot) {
                       if (snapshot.data == null) {
@@ -134,7 +135,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       if (snapshot.hasData) {
                         allArtistesSongs = snapshot.data!;
                         return RefreshIndicator(
-                          onRefresh: () => getArtistSongs(widget.artisteId),
+                          onRefresh: () => getAlbumSongs(widget.albumId),
                           child: ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {

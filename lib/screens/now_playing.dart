@@ -178,8 +178,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             animator.stop();
                           }
                           return ProgressBar(
-                            barHeight: 3,
-                            thumbRadius: 5,
+                            barHeight: 6,
+                            thumbRadius: 4,
                             progress: progress,
                             buffered: buffered,
                             total: total,
