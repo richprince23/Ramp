@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/album_screen.dart';
 import 'package:ramp/screens/main_screen.dart';
 import 'package:ramp/styles/style.dart';
@@ -24,47 +25,51 @@ class _AllAlbumScreenState extends State<AllAlbumScreen> {
   }
 }
 
-GridView buildAlbums(List<AlbumModel> snapshot) {
-  return GridView.builder(
-    gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-    padding: const EdgeInsets.only(bottom: 40),
-    itemCount: snapshot.length,
-    itemBuilder: ((context, index) {
-      return Card(
-        color: Colors.transparent,
-        elevation: 0,
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: InkWell(
-          onTap: () {
-            Get.to(() => AlbumScreen(
-                  albumId: snapshot[index].id,
-                  albumName: snapshot[index].album,
-                ));
-          },
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  // color: Colors.white,
-                  height: MediaQuery.of(context).size.width / 2.6,
-                  width: MediaQuery.of(context).size.width / 2.6,
-                  // width: 80,
-                  child: QueryArtworkWidget(
-                      artworkFit: BoxFit.fill,
-                      artworkBorder: BorderRadius.circular(8),
-                      id: snapshot[index].id,
-                      type: ArtworkType.ALBUM),
-                ),
-                Text(
-                  snapshot[index].album,
-                  style: const TextStyle(
-                      overflow: TextOverflow.ellipsis, fontSize: 12),
-                ),
-              ]),
-        ),
-      );
-    }),
+Widget buildAlbums(List<AlbumModel> snapshot) {
+  return RefreshIndicator(
+    onRefresh: () => getAlbums(),
+    child: GridView.builder(
+      cacheExtent: 1000,
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      padding: const EdgeInsets.only(bottom: 40),
+      itemCount: snapshot.length,
+      itemBuilder: ((context, index) {
+        return Card(
+          color: Colors.transparent,
+          elevation: 0,
+          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: InkWell(
+            onTap: () {
+              Get.to(() => AlbumScreen(
+                    albumId: snapshot[index].id,
+                    albumName: snapshot[index].album,
+                  ));
+            },
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    // color: Colors.white,
+                    height: MediaQuery.of(context).size.width / 2.6,
+                    width: MediaQuery.of(context).size.width / 2.6,
+                    // width: 80,
+                    child: QueryArtworkWidget(
+                        artworkFit: BoxFit.fill,
+                        artworkBorder: BorderRadius.circular(8),
+                        id: snapshot[index].id,
+                        type: ArtworkType.ALBUM),
+                  ),
+                  Text(
+                    snapshot[index].album,
+                    style: const TextStyle(
+                        overflow: TextOverflow.ellipsis, fontSize: 12),
+                  ),
+                ]),
+          ),
+        );
+      }),
+    ),
   );
 }

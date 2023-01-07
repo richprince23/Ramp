@@ -106,6 +106,16 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Text(
+                          // curTrack != null ? curTrack!.title : "Track 1",
+                          context.read<SongProvider>().getSong()!.title ?? "Track 1",
+                          style: const TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
                         InkWell(
                           onTap: () => Get.to(
                             preventDuplicates: true,
@@ -125,18 +135,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             ),
                           ),
                         ),
+                        
                         SizedBox(
                           height: 10,
-                        ),
-                        Text(
-                          // curTrack != null ? curTrack!.title : "Track 1",
-                          context.read<SongProvider>().getSong()!.title,
-                          style: const TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
                         ),
                       ],
                     ),

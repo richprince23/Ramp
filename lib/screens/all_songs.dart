@@ -50,6 +50,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
             }),
             child: ListView.builder(
               itemCount: snapshot.data!.length,
+              cacheExtent: 400,
               itemBuilder: (context, index) {
                 return Slidable(
                   startActionPane:
@@ -95,9 +96,10 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     leading: QueryArtworkWidget(
-                        artworkBorder: BorderRadius.circular(0),
-                        id: snapshot.data![index].id,
-                        type: ArtworkType.AUDIO),
+                            artworkBorder: BorderRadius.circular(0),
+                            id: snapshot.data![index].id,
+                            type: ArtworkType.AUDIO) ??
+                        SizedBox.shrink(),
                   ),
                 );
               },

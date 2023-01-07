@@ -36,7 +36,7 @@ class _AllArtistesState extends State<AllArtistes> {
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 40),
         itemCount: snapshot.length,
-        cacheExtent: 20,
+        cacheExtent: 200 ,
         itemBuilder: ((context, index) {
           if (snapshot.isEmpty) {
             return const Center(
