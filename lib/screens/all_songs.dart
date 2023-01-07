@@ -76,15 +76,18 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                 onTap: () {
                   playMedia(context, allSongs, index);
                 },
-                trailing: IconButton(
-                    icon: Icon(index ==
-                            Provider.of<SongProvider>(context, listen: false)
-                                .index
-                        ? Icons.equalizer
-                        : null),
-                    onPressed: () {
-                      // add to favorites
-                    }),
+                trailing: Consumer<SongProvider>(
+                  builder: (context, song, child) => IconButton(
+                      icon: Icon(index ==
+                              Provider.of<SongProvider>(context, listen: false)
+                                  .index
+                          ? Icons.play_arrow
+                          : null),
+                      color: Colors.pinkAccent,
+                      onPressed: () {
+                        // add to favorites
+                      }),
+                ),
                 title: Row(
                   children: [
                     Flexible(
@@ -104,19 +107,4 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
     );
   }
 
-  // void updateSong() {
-  //   // setState(() {
-  //   songPlayer.currentIndexStream.listen((index) {
-  //     if (index != null) {
-  //       if (curQueue.isNotEmpty) {
-  //         // curTrack = curQueue[index];
-  //         curIndex = index;
-  //         Provider.of<SongProvider>(context, listen: false)
-  //             .setSong(curQueue[index]);
-  //         Provider.of<SongProvider>(context, listen: false).setIndex(index);
-  //       }
-  //     }
-  //   });
-  //   // });
-  // }
 }

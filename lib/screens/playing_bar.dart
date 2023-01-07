@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/now_playing.dart';
+import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
 
 class PlayingBar extends StatefulWidget {
@@ -29,8 +30,9 @@ class _PlayingBarState extends State<PlayingBar> {
               ? Get.to(() => NowPlayingScreen())
               : null,
       child: Container(
-        height: 40,
-        // padding: const EdgeInsets.all(8),
+        color: darkTheme.colorScheme.onSecondary,
+        height: 50,
+        padding: const EdgeInsets.all(4),
         child: Row(
           children: [
             Padding(
@@ -76,12 +78,31 @@ class _PlayingBarState extends State<PlayingBar> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Consumer<SongProvider>(
-                  builder: ((context, song, child) => IconButton(
-                        onPressed: () {},
-                        icon: Icon(song.getSong() != null
-                            ? Icons.play_arrow
-                            : Icons.pause),
-                      )),
+                  builder: (context, song, child) => IconButton(
+                    onPressed: () {
+                      setState(() {
+                        song.playing != true
+                            ? songPlayer.play()
+                            : songPlayer.pause();
+                      });
+                    },
+                    icon: Icon(
+                        song.playing != true ? Icons.play_arrow : Icons.pause),
+                  ),
+                ),
+                Consumer<SongProvider>(
+                  builder: (context, song, child) => IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (songPlayer.hasNext == true) {
+                          songPlayer.seekToNext();
+                        }
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.skip_next,
+                    ),
+                  ),
                 ),
               ],
             )
