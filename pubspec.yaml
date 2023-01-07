@@ -45,11 +45,15 @@ dependencies:
   rxdart: ^0.27.4
   provider: 
   flutter_slidable: 
+  flutter_native_splash:
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_native_splash:
+  image: assets/icons/international_music_200px.png
+  color: "#FFFFFF"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
