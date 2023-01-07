@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import "package:provider/provider.dart";
@@ -70,6 +69,24 @@ Future<List<ArtistModel>> getArtists() async {
   return allArtistes;
 }
 
+Future<List<SongModel>> getArtistSongs(int id) async {
+  return allArtistesSongs = await onAudioQuery.queryAudiosFrom(
+      AudiosFromType.ARTIST_ID, id,
+      sortType: SongSortType.ALBUM);
+}
+
+getArtisteModel(int id) async {
+  List<SongModel> songs = await onAudioQuery.queryAudiosFrom(
+      AudiosFromType.ARTIST_ID, id,
+      sortType: SongSortType.ARTIST);
+
+  List<SongModel> ss = songs.toSongModel();
+  // print(artiste);
+  // notifyListeners();
+  // return songs[0].artist! ?? "Unknown";
+  return ss[0].artist! ?? "Unknown";
+}
+
 class SongProvider extends ChangeNotifier {
   void setSong(SongModel song) {
     curTrack = song;
@@ -91,4 +108,15 @@ class SongProvider extends ChangeNotifier {
   get playing => songPlayer.playing;
 
   get index => curIndex;
+
+  // String getArtisteModel(int id) {
+  //   String artiste = "";
+  //   onAudioQuery
+  //       .queryAudiosFrom(AudiosFromType.ARTIST_ID, id,
+  //           sortType: SongSortType.ARTIST)
+  //       .then((value) => artiste = value[0].artist!);
+  //   // print(artiste);
+  //   notifyListeners();
+  //   return artiste ?? "Unknown";
+  // }
 }

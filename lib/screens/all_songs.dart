@@ -21,8 +21,6 @@ class AllSongsScreen extends StatefulWidget {
 }
 
 class _AllSongsScreenState extends State<AllSongsScreen> {
-  songController trackController = Get.put<songController>(songController());
-  final AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {

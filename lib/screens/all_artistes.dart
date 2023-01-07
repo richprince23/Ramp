@@ -43,10 +43,11 @@ class _AllArtistesState extends State<AllArtistes> {
           return ListTile(
             onTap: () {
               Get.to(
+                  preventDuplicates: true,
                   () => ArtistScreen(
-                        artistModel: snapshot[index],
-                      ),
-                  transition: Transition.leftToRight);
+                      artisteId: snapshot[index].id,
+                      artistName: snapshot[index].artist),
+                  transition: Transition.rightToLeft);
             },
             title: Text(snapshot[index].artist,
                 style: const TextStyle(color: Colors.white)),
