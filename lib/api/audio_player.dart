@@ -22,9 +22,11 @@ playMedia(BuildContext context, List<SongModel> list, int index) {
         preload: true, initialIndex: index);
     songPlayer.play();
     // curTrack = curQueue[index];
+    // isPlaying = songPlayer.playing;
     Provider.of<SongProvider>(context, listen: false).setSong(curQueue[index]);
     Provider.of<SongProvider>(context, listen: false).setIndex(index);
-    isPlaying = songPlayer.playing;
+    Provider.of<SongProvider>(context, listen: false)
+        .setPlaying(songPlayer.playing);
   } else {
     print("HTHE QUEUE IS EMPTY \N\N\N\N\N");
   }

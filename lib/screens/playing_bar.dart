@@ -16,46 +16,77 @@ class PlayingBar extends StatefulWidget {
 
 class _PlayingBarState extends State<PlayingBar> {
   @override
+  void initState() {
+    super.initState();
+    // updateSong();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => NowPlayingScreen()),
+      onTap: () =>
+          Provider.of<SongProvider>(context, listen: false).getSong() != null
+              ? Get.to(() => NowPlayingScreen())
+              : null,
       child: Container(
-        padding: const EdgeInsets.all(8),
-        child: Consumer<SongProvider>(builder: ((context, song, child) {
-          return Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: SizedBox(
+        height: 40,
+        // padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SizedBox(
                   width: 40,
                   height: 40,
-                  child: song.getSong() != null
-                      ? CircleAvatar(
-                          radius: 20,
-                          child: QueryArtworkWidget(
-                              type: ArtworkType.AUDIO, id: curTrack!.id),
-                        )
-                      : CircleAvatar(),
+                  child: Consumer<SongProvider>(
+                    builder: (context, song, child) => song.getSong() != null
+                        ? CircleAvatar(
+                            radius: 20,
+                            child: QueryArtworkWidget(
+                                type: ArtworkType.AUDIO,
+                                id: Provider.of<SongProvider>(context,
+                                        listen: false)
+                                    .getSong()!
+                                    .id),
+                          )
+                        : const SizedBox.shrink(),
+                  )),
+            ),
+            Expanded(
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Consumer<SongProvider>(
+                  builder: ((context, song, child) => Text(
+                        song.getSong() != null
+                            ? song.getSong()!.title
+                            : "Not Playing",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
                 ),
               ),
-              Expanded(flex: 3, child: Text(song.getSong()!.title)),
-              Builder(builder: (context) {
-                return IconButton(
-                    onPressed: () {
-                      isPlaying == true
-                          ? songPlayer.pause()
-                          : songPlayer.play();
-                      setState(() {
-                        isPlaying = !isPlaying;
-                      });
-                    },
-                    icon: Provider.of<SongProvider>(context).playing
-                        ? Icon(Icons.pause)
-                        : Icon(Icons.play_arrow));
-              }),
-            ],
-          );
-        })),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Consumer<SongProvider>(
+                  builder: ((context, song, child) => IconButton(
+                        onPressed: () {},
+                        icon: Icon(song.getSong() != null
+                            ? Icons.play_arrow
+                            : Icons.pause),
+                      )),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

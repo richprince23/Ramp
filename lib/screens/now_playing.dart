@@ -11,6 +11,7 @@ import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/custom.dart';
+import 'package:ramp/screens/artist_screen.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:ramp/vars.dart';
@@ -49,7 +50,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
     animator =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     songPlayer.playing == true ? animator.repeat() : animator.stop();
-
     super.initState();
   }
 
@@ -110,21 +110,28 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                curTrack != null ? curTrack!.title : "Track 1",
-                                // context.watch<SongProvider>().getSong()!.title,
-                                style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
+                              InkWell(
+                                onTap: () => null,
+                                // Get.to(() => ArtistScreen()),
+                                child: Text(
+                                  curTrack != null
+                                      ? curTrack!.artist!
+                                      : "Unknown Artist",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Text(
-                                curTrack != null
-                                    ? curTrack!.artist!
-                                    : "Unknown Artist",
+                                // curTrack != null ? curTrack!.title : "Track 1",
+                                context.read<SongProvider>().getSong()!.title,
                                 style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white,
@@ -196,12 +203,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               if (songPlayer.hasPrevious) {
                                 songPlayer.seekToPrevious();
                                 songPlayer.play();
-                                Provider.of<SongProvider>(context,
-                                        listen: false)
-                                    .setIndex(songPlayer.previousIndex!);
-                                Provider.of<SongProvider>(context,
-                                        listen: false)
-                                    .setSong(curQueue[curIndex]);
                               }
                             }),
                         // oldPlay(),
@@ -276,12 +277,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               if (songPlayer.hasNext) {
                                 songPlayer.seekToNext();
                                 songPlayer.play();
-                                Provider.of<SongProvider>(context,
-                                        listen: false)
-                                    .setIndex(songPlayer.nextIndex!);
-                                Provider.of<SongProvider>(context,
-                                        listen: false)
-                                    .setSong(curQueue[curIndex]);
                               }
                             }),
                       ],

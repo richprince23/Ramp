@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -26,13 +27,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
   @override
   void initState() {
     super.initState();
-    getAcess();
-    songPlayer.currentIndexStream.listen((index) {
-      if (index != null) {
-        updateIndex(index);
-        // Provider.of<SongProvider>(context, listen: false).setIndex(index);
-      }
-    });
+    // updateSong();
   }
 
   @override
@@ -58,39 +53,70 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
           itemCount: snapshot.length,
           cacheExtent: 20,
           itemBuilder: ((context, index) {
-            return ListTile(
-              onTap: () {
-                playMedia(context, allSongs, index);
-              },
-              trailing: IconButton(
-                  icon: const Icon(Icons.more_horiz_outlined),
-                  onPressed: () {
-                    // add to favorites
+            return Slidable(
+              startActionPane:
+                  ActionPane(motion: const StretchMotion(), children: [
+                SlidableAction(
+                    onPressed: ((context) {
+                      print("hey");
+                    }),
+                    icon: Icons.playlist_add),
+              ]),
+              endActionPane:
+                  ActionPane(motion: const StretchMotion(), children: [
+                SlidableAction(
+                  foregroundColor: Colors.red,
+                  onPressed: ((context) {
+                    print("hey");
                   }),
-              title: Row(
-                children: [
-                  Flexible(
-                    child: Text(snapshot[index].title,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            overflow: TextOverflow.ellipsis)),
-                  ),
-                ],
+                  icon: Icons.favorite_outline,
+                ),
+              ]),
+              child: ListTile(
+                onTap: () {
+                  playMedia(context, allSongs, index);
+                },
+                trailing: IconButton(
+                    icon: Icon(index ==
+                            Provider.of<SongProvider>(context, listen: false)
+                                .index
+                        ? Icons.equalizer
+                        : null),
+                    onPressed: () {
+                      // add to favorites
+                    }),
+                title: Row(
+                  children: [
+                    Flexible(
+                      child: Text(snapshot[index].title,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              overflow: TextOverflow.ellipsis)),
+                    ),
+                  ],
+                ),
+                subtitle: Text(snapshot[index].artist ?? "Unknown Artiste"),
+                leading: QueryArtworkWidget(
+                    id: snapshot[index].id, type: ArtworkType.AUDIO),
               ),
-              subtitle: Text(snapshot[index].artist ?? "Unknown Artiste"),
-              leading: QueryArtworkWidget(
-                  id: snapshot[index].id, type: ArtworkType.AUDIO),
             );
           })),
     );
   }
 
-  void updateIndex(int index) {
-    // setState(() {
-    if (queue.isNotEmpty) {
-      trackController.setSong(queue[index]);
-      // curIndex = index;
-    }
-    // });
-  }
+  // void updateSong() {
+  //   // setState(() {
+  //   songPlayer.currentIndexStream.listen((index) {
+  //     if (index != null) {
+  //       if (curQueue.isNotEmpty) {
+  //         // curTrack = curQueue[index];
+  //         curIndex = index;
+  //         Provider.of<SongProvider>(context, listen: false)
+  //             .setSong(curQueue[index]);
+  //         Provider.of<SongProvider>(context, listen: false).setIndex(index);
+  //       }
+  //     }
+  //   });
+  //   // });
+  // }
 }

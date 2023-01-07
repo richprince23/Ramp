@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_query.dart';
+import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/playing_bar.dart';
 import 'package:ramp/vars.dart';
 import '../controllers/songController.dart';
@@ -28,6 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     requestPermission();
     // getMedia();
+    updateSong();
   }
 
   requestPermission() async {
@@ -39,6 +42,28 @@ class _MainScreenState extends State<MainScreen> {
       }
       setState(() {});
     }
+  }
+
+  void updateSong() {
+    // setState(() {
+    songPlayer.currentIndexStream.listen((index) {
+      if (index != null) {
+        if (curQueue.isNotEmpty) {
+          // curTrack = curQueue[index];
+          curIndex = index;
+          Provider.of<SongProvider>(context, listen: false)
+              .setSong(curQueue[index]);
+          Provider.of<SongProvider>(context, listen: false).setIndex(index);
+        }
+      }
+    });
+    // });
+  }
+
+  @override
+  void dispose() {
+    songPlayer.dispose();
+    super.dispose();
   }
 
   @override
