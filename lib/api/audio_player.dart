@@ -3,16 +3,23 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_query.dart';
-import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/vars.dart';
 
 //play song
-loadPlay(int index) {
-  songPlayer.setAudioSource(initialIndex: index, enqueue(queue));
+// loadPlay(int index) {
+//   songPlayer.setAudioSource(initialIndex: index, enqueue(queue));
 
-  songPlayer.play();
-  // Get.to(() => NowPlayingScreen(track: file));
+//   songPlayer.play();
+//   // Get.to(() => NowPlayingScreen(track: file));
+// }
+ConcatenatingAudioSource enqueue(List<SongModel>? data) {
+  List<AudioSource> sources = [];
+
+  for (SongModel song in data!) {
+    sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+  }
+  return ConcatenatingAudioSource(children: sources);
 }
 
 playMedia(BuildContext context, List<SongModel> list, int index) {

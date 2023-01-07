@@ -9,14 +9,14 @@ import 'package:ramp/vars.dart';
 
 import '../api/audio_query.dart';
 
-class AllAlbums extends StatefulWidget {
-  const AllAlbums({Key? key}) : super(key: key);
+class AllAlbumScreen extends StatefulWidget {
+  const AllAlbumScreen({Key? key}) : super(key: key);
 
   @override
-  State<AllAlbums> createState() => _AllAlbumsState();
+  State<AllAlbumScreen> createState() => _AllAlbumScreenState();
 }
 
-class _AllAlbumsState extends State<AllAlbums> {
+class _AllAlbumScreenState extends State<AllAlbumScreen> {
   @override
   Widget build(BuildContext context) {
     return buildAlbums(allAlbums);

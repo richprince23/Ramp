@@ -1,18 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
-import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/vars.dart';
-import '../api/audio_query.dart';
-import '../custom.dart';
-
 class AllSongsScreen extends StatefulWidget {
   const AllSongsScreen({Key? key}) : super(key: key);
 

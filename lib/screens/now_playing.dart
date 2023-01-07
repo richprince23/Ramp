@@ -1,24 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
-import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/api/audio_query.dart';
-import 'package:ramp/controllers/songController.dart';
 import 'package:ramp/controllers/song_provider.dart';
-import 'package:ramp/custom.dart';
 import 'package:ramp/screens/artist_screen.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:ramp/vars.dart';
 // import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/rxdart.dart' as Rxx;
 
-import 'queue_screen.dart';
+import 'package:rxdart/rxdart.dart' as rxx;
 
 class NowPlayingScreen extends StatefulWidget {
   SongModel? track;
@@ -38,7 +33,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
   late Stream<DurationState> _durationState;
 
   Stream<DurationState> get durationStateStream =>
-      Rxx.CombineLatestStream.combine2<Duration, Duration?, DurationState>(
+      rxx.CombineLatestStream.combine2<Duration, Duration?, DurationState>(
           songPlayer.positionStream,
           songPlayer.durationStream,
           (position, duration) => DurationState(
@@ -307,9 +302,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               color: Colors.grey,
                             )),
                         IconButton(
-                            onPressed: () {
-                              Get.to(() => QueueScreen());
-                            },
+                            onPressed: () {},
                             icon: Icon(
                               Icons.playlist_play,
                               color: Colors.white,

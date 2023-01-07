@@ -9,10 +9,9 @@ import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/playing_bar.dart';
 import 'package:ramp/vars.dart';
-import '../controllers/songController.dart';
+
 import '../styles/style.dart';
 import 'package:ramp/custom.dart';
-import '../widgets/playing_panel.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -24,7 +23,6 @@ class MainScreen extends StatefulWidget {
 int curPage = 0;
 
 class _MainScreenState extends State<MainScreen> {
-  songController trackController = Get.put<songController>(songController());
   @override
   void initState() {
     super.initState();

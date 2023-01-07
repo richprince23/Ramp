@@ -100,7 +100,7 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
         ),
         AllSongsScreen(),
         AllArtistes(),
-        AllAlbums()
+        AllAlbumScreen()
       ]),
     );
   }
