@@ -12,7 +12,7 @@ void main() async {
   // OnAudioQuery();
   // await OnAudioRoom().initRoom();
   WidgetsFlutterBinding.ensureInitialized();
-  getMedia();
+  // getMedia();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => SongProvider()),

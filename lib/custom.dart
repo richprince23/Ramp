@@ -9,9 +9,9 @@ import 'screens/library.dart';
 // class MyConsts {
 List<Widget> kPages = [
   Library(),
-  AllArtistes(),
-  AllSongsScreen(),
-  AllSongsScreen(),
+  Center(child: Text("Search")),
+  Center(child: Text("Discover")),
+  Center(child: Text("Profile")),
 ];
 // }
 

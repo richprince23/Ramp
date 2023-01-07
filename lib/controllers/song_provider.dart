@@ -50,13 +50,13 @@ Future<List<PlaylistModel>> getPlaylists() async {
 }
 
 Future<List<SongModel>> getSongs() async {
-  return allSongs = await onAudioQuery.querySongs(
+  allSongs = await onAudioQuery.querySongs(
     ignoreCase: true,
     orderType: OrderType.ASC_OR_SMALLER,
     sortType: SongSortType.ARTIST,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
-  // return allSongs;
+  return allSongs;
 }
 
 Future<List<ArtistModel>> getArtists() async {

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/vars.dart';
+
 class AllSongsScreen extends StatefulWidget {
   const AllSongsScreen({Key? key}) : super(key: key);
 
@@ -13,9 +14,9 @@ class AllSongsScreen extends StatefulWidget {
 }
 
 class _AllSongsScreenState extends State<AllSongsScreen> {
-
   @override
   void initState() {
+    // getSongs();
     super.initState();
     // updateSong();
   }
@@ -29,72 +30,85 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return buildSongs(allSongs);
+    return buildAllSongs();
   }
 
-  RefreshIndicator buildSongs(List<SongModel> snapshot) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        allSongs = await getSongs();
-        // setState(() {});
-      },
-      child: ListView.builder(
-          padding: const EdgeInsets.only(bottom: 40),
-          itemCount: snapshot.length,
-          cacheExtent: 20,
-          itemBuilder: ((context, index) {
-            return Slidable(
-              startActionPane:
-                  ActionPane(motion: const StretchMotion(), children: [
-                SlidableAction(
-                    onPressed: ((context) {
-                      print("hey");
-                    }),
-                    icon: Icons.playlist_add),
-              ]),
-              endActionPane:
-                  ActionPane(motion: const StretchMotion(), children: [
-                SlidableAction(
-                  foregroundColor: Colors.red,
-                  onPressed: ((context) {
-                    print("hey");
-                  }),
-                  icon: Icons.favorite_outline,
-                ),
-              ]),
-              child: ListTile(
-                onTap: () {
-                  playMedia(context, allSongs, index);
-                },
-                trailing: Consumer<SongProvider>(
-                  builder: (context, song, child) => IconButton(
-                      icon: Icon(index ==
-                              Provider.of<SongProvider>(context, listen: false)
-                                  .index
-                          ? Icons.play_arrow
-                          : null),
-                      color: Colors.pinkAccent,
-                      onPressed: () {
-                        // add to favorites
+  FutureBuilder<List<SongModel>> buildAllSongs() {
+    return FutureBuilder<List<SongModel>>(
+      future: getSongs(),
+      initialData: allSongs,
+      builder: (context, AsyncSnapshot<List<SongModel>> snapshot) {
+        if (snapshot.data == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasData) {
+          allArtistesSongs = snapshot.data!;
+          return RefreshIndicator(
+            onRefresh: () async => setState(() {
+              getSongs();
+            }),
+            child: ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return Slidable(
+                  startActionPane:
+                      ActionPane(motion: const StretchMotion(), children: [
+                    SlidableAction(
+                        onPressed: ((context) {
+                          print("hey");
+                        }),
+                        icon: Icons.playlist_add),
+                  ]),
+                  endActionPane:
+                      ActionPane(motion: const StretchMotion(), children: [
+                    SlidableAction(
+                      foregroundColor: Colors.red,
+                      onPressed: ((context) {
+                        print("hey");
                       }),
-                ),
-                title: Row(
-                  children: [
-                    Flexible(
-                      child: Text(snapshot[index].title,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              overflow: TextOverflow.ellipsis)),
+                      icon: Icons.favorite_outline,
                     ),
-                  ],
-                ),
-                subtitle: Text(snapshot[index].artist ?? "Unknown Artiste"),
-                leading: QueryArtworkWidget(
-                    id: snapshot[index].id, type: ArtworkType.AUDIO),
-              ),
-            );
-          })),
+                  ]),
+                  child: ListTile(
+                    onTap: () async {
+                      playMedia(context, allArtistesSongs, index);
+                    },
+                    trailing: Consumer<SongProvider>(
+                      builder: (context, song, child) => IconButton(
+                          icon: Icon(index ==
+                                  Provider.of<SongProvider>(context,
+                                          listen: false)
+                                      .index
+                              ? Icons.play_arrow
+                              : null),
+                          color: Colors.pinkAccent,
+                          onPressed: () {
+                            // add to favorites
+                          }),
+                    ),
+                    title: Text(snapshot.data![index].title,
+                        style: const TextStyle(
+                            fontSize: 16, overflow: TextOverflow.ellipsis)),
+                    subtitle: Text(
+                      snapshot.data![index].album!,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    leading: QueryArtworkWidget(
+                        artworkBorder: BorderRadius.circular(0),
+                        id: snapshot.data![index].id,
+                        type: ArtworkType.AUDIO),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text("No songs found"),
+          );
+        }
+      },
     );
   }
-
 }

@@ -17,6 +17,7 @@ class _AllArtistesState extends State<AllArtistes> {
   @override
   void initState() {
     // TODO: implement initState
+    // getArtists();
     super.initState();
   }
 
@@ -27,9 +28,11 @@ class _AllArtistesState extends State<AllArtistes> {
 
   RefreshIndicator getArtistes(List<ArtistModel> snapshot) {
     return RefreshIndicator(
-      onRefresh: () {
-        return getArtists();
-      },
+      onRefresh: () async => setState(
+        () {
+          getArtists();
+        },
+      ),
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 40),
         itemCount: snapshot.length,
