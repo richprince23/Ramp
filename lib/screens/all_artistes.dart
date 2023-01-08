@@ -23,43 +23,56 @@ class _AllArtistesState extends State<AllArtistes> {
 
   @override
   Widget build(BuildContext context) {
-    return getArtistes(allArtistes);
+    return buildArtistes();
   }
 
-  RefreshIndicator getArtistes(List<ArtistModel> snapshot) {
-    return RefreshIndicator(
-      onRefresh: () async => setState(
-        () {
-          getArtists();
-        },
-      ),
-      child: ListView.builder(
-        padding: const EdgeInsets.only(bottom: 40),
-        itemCount: snapshot.length,
-        cacheExtent: 200 ,
-        itemBuilder: ((context, index) {
-          if (snapshot.isEmpty) {
-            return const Center(
-              child: Text("No Artistes found"),
-            );
-          }
-          return ListTile(
-            onTap: () {
-              Get.to(
-                  preventDuplicates: true,
-                  () => ArtistScreen(
-                      artisteId: snapshot[index].id,
-                      artistName: snapshot[index].artist),
-                  transition: Transition.rightToLeft);
+  FutureBuilder<List<ArtistModel>> buildArtistes() {
+    return FutureBuilder<List<ArtistModel>>(
+      future: getArtistes(),
+      initialData: allArtistes,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ArtistModel>> snapshot) {
+        return RefreshIndicator(
+          onRefresh: () async => setState(
+            () {
+              getArtists();
             },
-            title: Text(snapshot[index].artist,
-                style: const TextStyle(color: Colors.white)),
-            subtitle: Text(snapshot[index].numberOfTracks.toString()),
-            leading: QueryArtworkWidget(
-                id: snapshot[index].id, type: ArtworkType.ARTIST),
-          );
-        }),
-      ),
+          ),
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: 40),
+            itemCount: snapshot.data!.length,
+            cacheExtent: 200,
+            itemBuilder: ((context, index) {
+              if (snapshot.data == null) {
+                return const Center(
+                  child: Text("No Artistes found"),
+                );
+              }
+              return ListTile(
+                onTap: () {
+                  Get.to(
+                      preventDuplicates: true,
+                      () => ArtistScreen(
+                            artisteId: snapshot.data![index].id,
+                            artistName: snapshot.data![index].artist == null
+                                ? "Unknown Artiste"
+                                : snapshot.data![index].artist.toString(),
+                          ),
+                      transition: Transition.rightToLeft);
+                },
+                title: Text(
+                    snapshot.data![index].artist == null
+                        ? "Unknown Artiste"
+                        : snapshot.data![index].artist,
+                    style: const TextStyle(color: Colors.white)),
+                subtitle: Text(snapshot.data![index].numberOfTracks.toString()),
+                leading: QueryArtworkWidget(
+                    id: snapshot.data![index].id, type: ArtworkType.ARTIST),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }

@@ -16,7 +16,7 @@ getMedia() async {
 Future<List<ArtistModel>> getArtistes() async {
   return allArtistes = await onAudioQuery.queryArtists(
     ignoreCase: true,
-    orderType: OrderType.DESC_OR_GREATER,
+    orderType: OrderType.ASC_OR_SMALLER,
     sortType: ArtistSortType.ARTIST,
     uriType: Platform.isAndroid ? UriType.EXTERNAL : UriType.INTERNAL,
   );
@@ -103,14 +103,4 @@ class SongProvider extends ChangeNotifier {
 
   get index => curIndex;
 
-  // String getArtisteModel(int id) {
-  //   String artiste = "";
-  //   onAudioQuery
-  //       .queryAudiosFrom(AudiosFromType.ARTIST_ID, id,
-  //           sortType: SongSortType.ARTIST)
-  //       .then((value) => artiste = value[0].artist!);
-  //   // print(artiste);
-  //   notifyListeners();
-  //   return artiste ?? "Unknown";
-  // }
 }

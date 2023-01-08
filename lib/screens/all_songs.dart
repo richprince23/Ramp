@@ -30,6 +30,7 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return buildAllSongs();
   }
 
@@ -73,7 +74,8 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                   ]),
                   child: ListTile(
                     onTap: () async {
-                      playMedia(context, allArtistesSongs, index);
+                      // playMedia(context, allArtistesSongs, index);
+                      playItem(context, snapshot.data![index]);
                     },
                     trailing: Consumer<SongProvider>(
                       builder: (context, song, child) => IconButton(
@@ -88,11 +90,11 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                             // add to favorites
                           }),
                     ),
-                    title: Text(snapshot.data![index].title,
+                    title: Text(snapshot.data![index].displayNameWOExt,
                         style: const TextStyle(
                             fontSize: 16, overflow: TextOverflow.ellipsis)),
                     subtitle: Text(
-                      snapshot.data![index].album!,
+                      snapshot.data![index].artist ?? "Unknown Artist",
                       overflow: TextOverflow.ellipsis,
                     ),
                     leading: QueryArtworkWidget(

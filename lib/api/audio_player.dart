@@ -23,6 +23,7 @@ ConcatenatingAudioSource enqueue(List<SongModel>? data) {
 }
 
 playMedia(BuildContext context, List<SongModel> list, int index) {
+  // curQueue.clear();
   curQueue = list;
   if (curQueue.isNotEmpty) {
     songPlayer.setAudioSource(enqueue(curQueue),
@@ -34,7 +35,21 @@ playMedia(BuildContext context, List<SongModel> list, int index) {
     Provider.of<SongProvider>(context, listen: false).setIndex(index);
     Provider.of<SongProvider>(context, listen: false)
         .setPlaying(songPlayer.playing);
-  } else {
-    print("HTHE QUEUE IS EMPTY \N\N\N\N\N");
   }
+}
+
+playItem(BuildContext context, SongModel song) {
+  // curQueue.clear();
+  curQueue = [song];
+  songPlayer.setAudioSource(
+    AudioSource.uri(Uri.parse(song.uri!)),
+    preload: true,
+  );
+  songPlayer.play();
+  // curTrack = curQueue[index];
+  // isPlaying = songPlayer.playing;
+  Provider.of<SongProvider>(context, listen: false).setSong(song);
+  Provider.of<SongProvider>(context, listen: false).setIndex(0);
+  Provider.of<SongProvider>(context, listen: false)
+      .setPlaying(songPlayer.playing);
 }

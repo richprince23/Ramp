@@ -108,10 +108,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                       children: [
                         Text(
                           // curTrack != null ? curTrack!.title : "Track 1",
-                          context.read<SongProvider>().getSong()!.title ?? "Track 1",
+                          context.read<SongProvider>().getSong()!.title ??
+                              "Track 1",
                           style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
-                            fontSize: 14,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
@@ -125,17 +126,15 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                             transition: Transition.zoom,
                           ),
                           child: Text(
-                            curTrack != null
-                                ? curTrack!.artist!
-                                : "Unknown Artist",
+                            context.read<SongProvider>().getSong()!.artist ??
+                                "Track 1",
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             ),
                           ),
                         ),
-                        
                         SizedBox(
                           height: 10,
                         ),
@@ -297,17 +296,24 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               color: Colors.grey,
                             )),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              songPlayer.shuffleModeEnabled == false
+                                  ? songPlayer.setShuffleModeEnabled(true)
+                                  : songPlayer.setShuffleModeEnabled(false);
+                            },
                             icon: Icon(
-                              Icons.shuffle,
+                              songPlayer.shuffleModeEnabled == false
+                                  ? Icons.shuffle
+                                  : Icons.shuffle_on,
                               color: Colors.grey,
                             )),
                         IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.playlist_play,
-                              color: Colors.white,
-                            )),
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.playlist_play,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   )

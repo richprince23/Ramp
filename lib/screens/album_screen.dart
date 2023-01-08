@@ -179,7 +179,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
                                               // add to favorites
                                             }),
                                   ),
-                                  title: Text(snapshot.data![index].title,
+                                  title: Text(
+                                      snapshot.data![index].displayNameWOExt,
                                       style: const TextStyle(
                                           fontSize: 16,
                                           overflow: TextOverflow.ellipsis)),
