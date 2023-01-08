@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import "package:provider/provider.dart";
 import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/vars.dart';
 

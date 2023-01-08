@@ -30,7 +30,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
     with TickerProviderStateMixin {
   double? value = 0.0;
   late AnimationController animator;
-  late Stream<DurationState> _durationState;
+  // late Stream<DurationState> _durationState;
 
   Stream<DurationState> get durationStateStream =>
       rxx.CombineLatestStream.combine2<Duration, Duration?, DurationState>(
@@ -41,7 +41,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
+
     animator =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     songPlayer.playing == true ? animator.repeat() : animator.stop();
@@ -172,7 +172,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                           final total = durationState?.total ?? Duration.zero;
 
                           final processingState = songPlayer.processingState;
-                          final playing = songPlayer.playing;
 
                           if (processingState == ProcessingState.completed) {
                             animator.stop();

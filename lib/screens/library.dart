@@ -1,16 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/custom.dart';
 import 'package:ramp/screens/all_albums.dart';
 import 'package:ramp/screens/all_songs.dart';
 import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
-import 'package:ramp/widgets/searchbar.dart';
 
 import 'all_artistes.dart';
 
@@ -28,9 +21,8 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
       TabController(vsync: this, length: myTabs.length);
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     getAcess();
+    super.initState();
   }
 
   @override

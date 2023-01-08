@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/controllers/song_provider.dart';
-import 'package:ramp/custom.dart';
 import 'package:ramp/screens/artist_screen.dart';
 import 'package:ramp/vars.dart';
 
@@ -16,7 +15,6 @@ class AllArtistes extends StatefulWidget {
 class _AllArtistesState extends State<AllArtistes> {
   @override
   void initState() {
-    // TODO: implement initState
     // getArtists();
     super.initState();
   }

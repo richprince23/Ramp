@@ -6,7 +6,6 @@ import 'package:ramp/api/audio_query.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/now_playing.dart';
 import 'package:ramp/styles/style.dart';
-import 'package:ramp/vars.dart';
 
 class PlayingBar extends StatefulWidget {
   const PlayingBar({super.key});

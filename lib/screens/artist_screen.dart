@@ -22,15 +22,7 @@ class ArtistScreen extends StatefulWidget {
 
 class _ArtistScreenState extends State<ArtistScreen> {
   String? artistName;
-  @override
-  void initState() {
-    // TODO: implement initState
-    setState(() {
-      // artistName = getArtisteModel(widget.artisteId);
-    });
-    super.initState();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     // artistName = getArtisteModel(widget.artisteId);

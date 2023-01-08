@@ -1,15 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:ramp/controllers/song_provider.dart';
 import 'package:ramp/screens/album_screen.dart';
-import 'package:ramp/screens/main_screen.dart';
-import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
-
-import '../api/audio_query.dart';
 
 class AllAlbumScreen extends StatefulWidget {
   const AllAlbumScreen({Key? key}) : super(key: key);

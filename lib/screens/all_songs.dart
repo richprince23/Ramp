@@ -4,7 +4,6 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/song_provider.dart';
-import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
 
 class AllSongsScreen extends StatefulWidget {
@@ -20,13 +19,6 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
     // getSongs();
     super.initState();
     // updateSong();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    // songPlayer.dispose();
-    super.dispose();
   }
 
   @override
