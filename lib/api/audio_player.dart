@@ -24,9 +24,10 @@ ConcatenatingAudioSource enqueue(List<SongModel>? data) {
         // Specify a unique ID for each media item:
         id: song.id.toString(),
         // Metadata to display in the notification:
-        album: song.album ?? "Unknown album",
+        artist: song.artist ?? "Unknown artist",
         title: song.title ?? song.displayNameWOExt,
-        artUri: Uri.parse('file://assets/icons/international_music_200px.png}'),
+        artUri: Uri.parse(
+            'https://img.icons8.com/ios-filled/64/international-music.png}'),
       ),
     ));
   }
