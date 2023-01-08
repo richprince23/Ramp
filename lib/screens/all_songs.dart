@@ -4,6 +4,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_player.dart';
 import 'package:ramp/controllers/song_provider.dart';
+import 'package:ramp/styles/style.dart';
 import 'package:ramp/vars.dart';
 
 class AllSongsScreen extends StatefulWidget {
@@ -30,8 +31,64 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    return buildAllSongs();
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            // color: darkTheme.backgroundColor,
+            padding: const EdgeInsets.all(4),
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton.icon(
+                  onPressed: () async{
+                    await playMedia(context, allSongs, 1);
+                  },
+                  icon: Icon(Icons.play_arrow),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  label: Text(
+                    "Play All",
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () async{
+                    await playMedia(context, allSongs, 1, shuffle: true);
+                  },
+                  icon: Icon(Icons.shuffle),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  label: Text(
+                    "Shuffle",
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.70,
+            child: buildAllSongs(),
+          ),
+          // buildAllSongs(),
+        ],
+      ),
+    );
   }
 
   FutureBuilder<List<SongModel>> buildAllSongs() {

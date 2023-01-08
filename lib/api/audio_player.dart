@@ -22,15 +22,18 @@ ConcatenatingAudioSource enqueue(List<SongModel>? data) {
   return ConcatenatingAudioSource(children: sources);
 }
 
-playMedia(BuildContext context, List<SongModel> list, int index) {
+Future playMedia(BuildContext context, List<SongModel> list, int index,
+    {bool shuffle = false}) async {
   // curQueue.clear();
   curQueue = list;
+
   if (curQueue.isNotEmpty) {
-    songPlayer.setAudioSource(enqueue(curQueue),
+    await songPlayer.setAudioSource(enqueue(curQueue),
         preload: true, initialIndex: index);
+
+    songPlayer.setShuffleModeEnabled(shuffle);
+
     songPlayer.play();
-    // curTrack = curQueue[index];
-    // isPlaying = songPlayer.playing;
     Provider.of<SongProvider>(context, listen: false).setSong(curQueue[index]);
     Provider.of<SongProvider>(context, listen: false).setIndex(index);
     Provider.of<SongProvider>(context, listen: false)
@@ -38,16 +41,14 @@ playMedia(BuildContext context, List<SongModel> list, int index) {
   }
 }
 
-playItem(BuildContext context, SongModel song) {
+playItem(BuildContext context, SongModel song) async {
   // curQueue.clear();
   curQueue = [song];
-  songPlayer.setAudioSource(
+  await songPlayer.setAudioSource(
     AudioSource.uri(Uri.parse(song.uri!)),
     preload: true,
   );
   songPlayer.play();
-  // curTrack = curQueue[index];
-  // isPlaying = songPlayer.playing;
   Provider.of<SongProvider>(context, listen: false).setSong(song);
   Provider.of<SongProvider>(context, listen: false).setIndex(0);
   Provider.of<SongProvider>(context, listen: false)
