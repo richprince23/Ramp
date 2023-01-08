@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/api/audio_query.dart';
@@ -17,7 +18,17 @@ ConcatenatingAudioSource enqueue(List<SongModel>? data) {
   List<AudioSource> sources = [];
 
   for (SongModel song in data!) {
-    sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+    sources.add(AudioSource.uri(
+      Uri.parse(song.uri!),
+      tag: MediaItem(
+        // Specify a unique ID for each media item:
+        id: song.id.toString(),
+        // Metadata to display in the notification:
+        album: song.album ?? "Unknown album",
+        title: song.title ?? song.displayNameWOExt,
+        artUri: Uri.parse('file://assets/icons/international_music_200px.png}'),
+      ),
+    ));
   }
   return ConcatenatingAudioSource(children: sources);
 }
@@ -45,7 +56,16 @@ playItem(BuildContext context, SongModel song) async {
   // curQueue.clear();
   curQueue = [song];
   await songPlayer.setAudioSource(
-    AudioSource.uri(Uri.parse(song.uri!)),
+    AudioSource.uri(
+      Uri.parse(song.uri!),
+      tag: MediaItem(
+        id: song.id.toString(),
+        artist: song.artist ?? "Unknown artist",
+        title: song.title ?? song.displayNameWOExt,
+        artUri: Uri.parse(
+            'https://img.icons8.com/ios-filled/64/international-music.png}'),
+      ),
+    ),
     preload: true,
   );
   songPlayer.play();
