@@ -22,7 +22,7 @@ class ArtistScreen extends StatefulWidget {
 
 class _ArtistScreenState extends State<ArtistScreen> {
   String? artistName;
-  
+
   @override
   Widget build(BuildContext context) {
     // artistName = getArtisteModel(widget.artisteId);
@@ -58,55 +58,42 @@ class _ArtistScreenState extends State<ArtistScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      width: 150,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.play_arrow,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                            Text("Play",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12)),
-                          ],
+                    TextButton.icon(
+                      onPressed: () async {
+                        await playMedia(context, allArtistesSongs, 0);
+                      },
+                      icon: Icon(Icons.play_arrow),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                      ),
+                      label: Text(
+                        "Play All",
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      width: 150,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.shuffle,
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                            Text("Shuffle",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12)),
-                          ],
+                    TextButton.icon(
+                      onPressed: () async {
+                        await playMedia(context, allSongs, 0, shuffle: true);
+                      },
+                      icon: Icon(Icons.shuffle),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    )
+                      label: Text(
+                        "Shuffle",
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
                   ],
                 ),
                 Container(

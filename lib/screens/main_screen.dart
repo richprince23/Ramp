@@ -25,6 +25,8 @@ class _MainScreenState extends State<MainScreen> {
     requestPermission();
     // getMedia();
     updateSong();
+    checkShuffle();
+    checkLoop();
   }
 
   requestPermission() async {
@@ -52,6 +54,18 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
     // });
+  }
+
+  checkShuffle() {
+    songPlayer.shuffleModeEnabledStream.listen((event) {
+      print(event);
+    });
+  }
+
+  checkLoop() {
+    songPlayer.loopModeStream.listen((event) {
+      print(event);
+    });
   }
 
   @override

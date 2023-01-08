@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -34,8 +36,8 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton.icon(
-                  onPressed: () async{
-                    await playMedia(context, allSongs, 1);
+                  onPressed: () async {
+                    await playMedia(context, allSongs, 0);
                   },
                   icon: Icon(Icons.play_arrow),
                   style: TextButton.styleFrom(
@@ -52,8 +54,10 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: () async{
-                    await playMedia(context, allSongs, 1, shuffle: true);
+                  onPressed: () async {
+                    await playMedia(context, allSongs,
+                        Random().nextInt(allSongs.length ),
+                        shuffle: true);
                   },
                   icon: Icon(Icons.shuffle),
                   style: TextButton.styleFrom(
@@ -139,7 +143,10 @@ class _AllSongsScreenState extends State<AllSongsScreen> {
                             // add to favorites
                           }),
                     ),
-                    title: Text(snapshot.data![index].displayNameWOExt,
+                    title: Text(
+                        snapshot.data![index].title == ""
+                            ? snapshot.data![index].displayNameWOExt
+                            : snapshot.data![index].title,
                         style: const TextStyle(
                             fontSize: 16, overflow: TextOverflow.ellipsis)),
                     subtitle: Text(

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -41,10 +42,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
 
   @override
   void initState() {
-
     animator =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
     songPlayer.playing == true ? animator.repeat() : animator.stop();
+
     super.initState();
   }
 
@@ -91,9 +92,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     child: song.getSong() != null
                         ? QueryArtworkWidget(
                             artworkWidth:
-                                MediaQuery.of(context).size.width * 0.3,
+                                MediaQuery.of(context).size.width * 0.4,
                             artworkHeight:
-                                MediaQuery.of(context).size.width * 0.3,
+                                MediaQuery.of(context).size.width * 0.4,
                             id: curTrack!.id,
                             artworkBorder: BorderRadius.circular(100),
                             type: ArtworkType.AUDIO)
@@ -109,13 +110,15 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         Text(
                           // curTrack != null ? curTrack!.title : "Track 1",
                           context.read<SongProvider>().getSong()!.title ??
-                              "Track 1",
+                              "Untitled Track",
                           style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
                         ),
                         InkWell(
                           onTap: () => Get.to(
@@ -288,24 +291,67 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.loop,
-                              color: Colors.grey,
-                            )),
-                        IconButton(
-                            onPressed: () {
+                        Builder(builder: (context) {
+                          if (songPlayer.loopMode == LoopMode.off) {
+                            return IconButton(
+                              tooltip: "Loop All",
+                              onPressed: () => setState(() {
+                                songPlayer.setLoopMode(LoopMode.all);
+                              }),
+                              icon: Icon(
+                                Icons.repeat,
+                                color: Colors.white,
+                              ),
+                            );
+                          } else if (songPlayer.loopMode == LoopMode.all) {
+                            return IconButton(
+                              tooltip: "Loop One",
+                              onPressed: () => setState(() {
+                                songPlayer.setLoopMode(LoopMode.one);
+                              }),
+                              icon: Icon(
+                                Icons.repeat_one,
+                                color: Colors.white70,
+                              ),
+                            );
+                          } else {
+                            return IconButton(
+                              tooltip: "Loop Off",
+                              onPressed: () => setState(() {
+                                songPlayer.setLoopMode(LoopMode.off);
+                              }),
+                              icon: Icon(
+                                Icons.repeat_on_sharp,
+                                color: Colors.grey[700],
+                              ),
+                              color: Colors.black,
+                            );
+                          }
+                        }),
+                        Builder(
+                          builder: (context) =>
                               songPlayer.shuffleModeEnabled == false
-                                  ? songPlayer.setShuffleModeEnabled(true)
-                                  : songPlayer.setShuffleModeEnabled(false);
-                            },
-                            icon: Icon(
-                              songPlayer.shuffleModeEnabled == false
-                                  ? Icons.shuffle
-                                  : Icons.shuffle_on,
-                              color: Colors.grey,
-                            )),
+                                  ? IconButton(
+                                      tooltip: "Shuffle off",
+                                      onPressed: () => setState(() {
+                                        songPlayer.setShuffleModeEnabled(true);
+                                      }),
+                                      icon: Icon(
+                                        Icons.shuffle,
+                                        color: Colors.grey,
+                                      ),
+                                    )
+                                  : IconButton(
+                                      tooltip: "Shuffle on",
+                                      onPressed: () => setState(() {
+                                        songPlayer.setShuffleModeEnabled(false);
+                                      }),
+                                      icon: Icon(
+                                        Icons.shuffle,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                        ),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(
