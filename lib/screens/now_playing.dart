@@ -321,10 +321,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                 songPlayer.setLoopMode(LoopMode.off);
                               }),
                               icon: Icon(
-                                Icons.repeat_on_sharp,
+                                Icons.repeat,
                                 color: Colors.grey[700],
                               ),
-                              color: Colors.black,
                             );
                           }
                         }),

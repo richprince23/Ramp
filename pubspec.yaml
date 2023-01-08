@@ -45,8 +45,10 @@ dependencies:
   rxdart: ^0.27.4
   provider: 
   flutter_slidable: 
-  flutter_native_splash:
-  
+  flutter_native_splash: 
+  just_audio_background: 
+  shared_preferences: 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

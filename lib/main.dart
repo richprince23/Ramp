@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:ramp/screens/main_screen.dart';
 import 'package:ramp/controllers/song_provider.dart';
 // import 'get/get.dart';
 
 void main() async {
-  // OnAudioQuery();
-  // await OnAudioRoom().initRoom();
   WidgetsFlutterBinding.ensureInitialized();
+
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   // getMedia();
   runApp(MultiProvider(
     providers: [
